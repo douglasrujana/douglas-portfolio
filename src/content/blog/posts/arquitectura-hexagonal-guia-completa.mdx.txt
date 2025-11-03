@@ -1,0 +1,219 @@
+---
+title: 'Arquitectura Hexagonal: Guía Completa para Desarrolladores Modernos'
+description: 'Aprende a implementar arquitectura hexagonal (Ports & Adapters) en tus proyectos. Desde los principios SOLID hasta ejemplos reales con TypeScript.'
+author: 'Douglas Rujana'
+publishedAt: 2025-01-15
+category: 'architecture'
+tags: ['arquitectura', 'clean-code', 'typescript', 'solid', 'design-patterns']
+featured: true
+draft: false
+coverImage: 'https://images.unsplash.com/photo-1555949963-ff9fe0c870eb?w=1200&h=630&fit=crop'
+showToc: true
+crosspost:
+  linkedin: true
+  twitter: true
+  facebook: false
+  devto: true
+---
+
+La **arquitectura hexagonal** (también conocida como *Ports & Adapters*) es un patrón arquitectónico que te permite construir aplicaciones mantenibles, testables y completamente desacopladas de frameworks y tecnologías específicas.
+
+## ¿Por qué Arquitectura Hexagonal?
+
+En proyectos tradicionales, es común ver código fuertemente acoplado a:
+- Frameworks web (Express, NestJS, Laravel)
+- Bases de datos específicas (MySQL, MongoDB)
+- APIs externas (Stripe, Twilio, AWS)
+
+Este acoplamiento genera **vendor lock-in** y hace que:
+- ❌ Migrar de tecnología sea una pesadilla
+- ❌ Los tests requieran infraestructura real
+- ❌ La lógica de negocio se mezcle con detalles técnicos
+
+La arquitectura hexagonal soluciona esto **invirtiendo las dependencias**.
+
+## Principios Fundamentales
+
+### 1. Separation of Concerns
+
+Divide tu aplicación en **3 capas**:
+
+```
+┌─────────────────────────────────────┐
+│   PRESENTATION LAYER (UI/API)       │  ← Adapters (entrada)
+├─────────────────────────────────────┤
+│   APPLICATION LAYER (Use Cases)     │  ← Orquestación
+├─────────────────────────────────────┤
+│   DOMAIN LAYER (Business Logic)     │  ← Core (reglas de negocio)
+├─────────────────────────────────────┤
+│   INFRASTRUCTURE LAYER (Adapters)   │  ← Adapters (salida)
+└─────────────────────────────────────┘
+```
+
+### 2. Dependency Inversion Principle (DIP)
+
+Las capas superiores **no dependen** de las inferiores. Ambas dependen de **abstracciones** (interfaces).
+
+```typescript
+// ❌ MAL: Dependencia directa
+class UserService {
+  constructor(private db: MySQLDatabase) {}
+}
+
+// ✅ BIEN: Dependencia en abstracción
+interface IUserRepository {
+  save(user: User): Promise<void>;
+}
+
+class UserService {
+  constructor(private repo: IUserRepository) {}
+}
+```
+
+## Implementación Práctica
+
+### Paso 1: Define el Puerto (Interface)
+
+```typescript
+// src/core/ports/ILLMProvider.ts
+export interface ILLMProvider {
+  generateResponse(prompt: string): Promise<string>;
+}
+```
+
+### Paso 2: Crea el Adapter
+
+```typescript
+// src/infrastructure/adapters/GeminiAdapter.ts
+import { ILLMProvider } from '@core/ports/ILLMProvider';
+
+export class GeminiAdapter implements ILLMProvider {
+  async generateResponse(prompt: string): Promise<string> {
+    // Implementación específica de Gemini
+    return "Respuesta...";
+  }
+}
+```
+
+### Paso 3: Usa el Factory Pattern
+
+```typescript
+// src/infrastructure/adapters/LLMFactory.ts
+export class LLMFactory {
+  static create(provider: 'gemini' | 'openai'): ILLMProvider {
+    switch (provider) {
+      case 'gemini':
+        return new GeminiAdapter();
+      case 'openai':
+        return new OpenAIAdapter();
+    }
+  }
+}
+```
+
+### Paso 4: Inyecta la Dependencia
+
+```typescript
+// src/application/use-cases/GenerateResponse.ts
+export class GenerateResponseUseCase {
+  constructor(private llm: ILLMProvider) {}
+  
+  async execute(prompt: string): Promise<string> {
+    return await this.llm.generateResponse(prompt);
+  }
+}
+```
+
+## Ventajas Reales
+
+### 🧪 Testing Simplificado
+
+```typescript
+// Mock del adapter sin infraestructura real
+class MockLLMProvider implements ILLMProvider {
+  async generateResponse(prompt: string): Promise<string> {
+    return "Mock response";
+  }
+}
+
+// Test unitario
+const useCase = new GenerateResponseUseCase(new MockLLMProvider());
+const result = await useCase.execute("test");
+expect(result).toBe("Mock response");
+```
+
+### 🔄 Zero Vendor Lock-in
+
+Cambias de Gemini a OpenAI en **2 líneas**:
+
+```typescript
+// Antes
+const llm = LLMFactory.create('gemini', { apiKey: key });
+
+// Después
+const llm = LLMFactory.create('openai', { apiKey: key });
+```
+
+Todo el resto del código **permanece intacto**.
+
+### 📦 Portabilidad Total
+
+Tu aplicación funciona en:
+- ✅ Vercel
+- ✅ Netlify
+- ✅ AWS Lambda
+- ✅ Docker self-hosted
+
+Solo cambias el adapter de deployment.
+
+## Errores Comunes
+
+### ❌ Layers que "saltan"
+
+```typescript
+// MAL: Presentation llama directamente a Infrastructure
+import { MySQLDatabase } from '@infrastructure/db';
+
+export function handler(req, res) {
+  const db = new MySQLDatabase();
+  // ...
+}
+```
+
+**Solución:** Siempre pasar por Application Layer.
+
+### ❌ Lógica de negocio en Adapters
+
+```typescript
+// MAL: Validación en el adapter
+class UserRepository {
+  async save(user: User) {
+    if (!user.email.includes('@')) {
+      throw new Error('Invalid email');
+    }
+    // ...
+  }
+}
+```
+
+**Solución:** Validación en Domain Layer (Entities/Value Objects).
+
+## Conclusión
+
+La arquitectura hexagonal requiere más setup inicial, pero te da:
+- ✅ Código mantenible a largo plazo
+- ✅ Tests rápidos y confiables
+- ✅ Flexibilidad para cambiar tecnologías
+- ✅ Separación clara de responsabilidades
+
+Es la diferencia entre código que **sobrevive 10 años** vs código que hay que reescribir cada 2 años.
+
+## Recursos
+
+- [Hexagonal Architecture by Alistair Cockburn](https://alistair.cockburn.us/hexagonal-architecture/)
+- [Clean Architecture by Robert C. Martin](https://blog.cleancoder.com/uncle-bob/2012/08/13/the-clean-architecture.html)
+- [Ejemplo completo en GitHub](https://github.com/douglasrujana/hexagonal-example)
+
+---
+
+¿Implementas arquitectura hexagonal en tus proyectos? ¿Qué otros patrones arquitectónicos usas? Déjame tus comentarios.

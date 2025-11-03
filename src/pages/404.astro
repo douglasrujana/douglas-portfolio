@@ -1,0 +1,68 @@
+---
+// src/pages/404.astro
+// Página de error 404 100% en Astro
+
+import Button from '@presentation/components/ui/Button.svelte';
+
+const siteTitle = 'Página no encontrada - 404';
+const siteDescription = 'Lo sentimos, la página que buscas no existe.';
+---
+
+<!DOCTYPE html>
+<html lang="es">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>{siteTitle}</title>
+    <meta name="description" content={siteDescription} />
+    <link rel="icon" type="image/svg+xml" href="/favicon.svg" />
+  </head>
+  <body class="layout-404">
+    <main class="container-404">
+      <h1 class="title-404">404</h1>
+      <p class="description-404">Lo sentimos, la página que buscas no existe.</p>
+      <Button client:load variant="primary" size="lg" href="/">
+        Volver a Inicio
+      </Button>
+    </main>
+  </body>
+</html>
+
+<style is:global>
+  @import '../styles/jony-ive.css';
+
+  .layout-404 {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    min-height: 100vh;
+    background-color: var(--color-white);
+    color: var(--color-gray-900);
+    font-family: var(--font-system);
+    text-align: center;
+    padding: var(--space-lg);
+  }
+
+  .container-404 {
+    max-width: 600px;
+    padding: var(--space-xl);
+    border-radius: var(--radius-lg);
+    background: var(--color-gray-50);
+    box-shadow: var(--shadow-md);
+  }
+
+  .title-404 {
+    font-size: clamp(4rem, 10vw, 8rem);
+    font-weight: 200;
+    color: var(--color-gray-800);
+    margin-bottom: var(--space-md);
+  }
+
+  .description-404 {
+    font-size: clamp(1.125rem, 3vw, 1.5rem);
+    color: var(--color-gray-600);
+    margin-bottom: var(--space-xl);
+    line-height: 1.5;
+  }
+</style>

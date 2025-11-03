@@ -1,0 +1,360 @@
+---
+/**
+ * Blog Index Page
+ * Lista todos los posts del blog con filtering
+ */
+
+import PostCard from '@presentation/components/blog/PostCard.svelte';
+import TechBadge from '@presentation/components/ui/TechBadge.svelte';
+import { getPublishedPosts, getAllTags, getAllCategories } from '../../lib/blog-utils';
+
+const posts = await getPublishedPosts();
+const tags = await getAllTags();
+const categories = await getAllCategories();
+
+// Meta
+const title = 'Blog - Douglas Rujana';
+const description = 'Artículos sobre desarrollo web, arquitectura de software, IA y mejores prácticas. Tutoriales, casos de estudio y opiniones técnicas.';
+---
+
+<!DOCTYPE html>
+<html lang="es">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>{title}</title>
+    <meta name="description" content={description} />
+    
+    <!-- Open Graph -->
+    <meta property="og:title" content={title} />
+    <meta property="og:description" content={description} />
+    <meta property="og:type" content="website" />
+    
+    <link rel="icon" type="image/svg+xml" href="/favicon.svg" />
+  </head>
+  <body>
+    <!-- Header/Nav -->
+    <header class="blog-header">
+      <div class="container-jony">
+        <nav class="blog-nav">
+          <a href="/" class="nav-link">
+            <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+              <path d="M3 9l9-7 9 7v11a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2z"></path>
+              <polyline points="9 22 9 12 15 12 15 22"></polyline>
+            </svg>
+            Inicio
+          </a>
+          <div class="nav-title">Blog</div>
+        </nav>
+      </div>
+    </header>
+
+    <!-- Hero -->
+    <section class="blog-hero">
+      <div class="container-jony">
+        <h1 class="hero-title">Blog</h1>
+        <p class="hero-description">
+          Artículos sobre desarrollo web, arquitectura de software, IA y mejores prácticas.
+          Comparto lo que aprendo construyendo productos escalables.
+        </p>
+        <div class="hero-stats">
+          <div class="stat">
+            <strong>{posts.length}</strong>
+            <span>artículos</span>
+          </div>
+          <div class="stat">
+            <strong>{categories.length}</strong>
+            <span>categorías</span>
+          </div>
+          <div class="stat">
+            <strong>{tags.length}</strong>
+            <span>temas</span>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- Filters (sidebar en desktop, acordeón en mobile) -->
+    <section class="blog-content">
+      <div class="container-jony">
+        <div class="blog-layout">
+          <!-- Sidebar -->
+          <aside class="blog-sidebar">
+            <!-- Categories -->
+            <div class="sidebar-section">
+              <h3 class="sidebar-title">Categorías</h3>
+              <div class="category-list">
+                {categories.map(({ category, count }) => (
+                  <a href={`/blog/category/${category}`} class="category-item">
+                    <span class="category-name">{category}</span>
+                    <span class="category-count">{count}</span>
+                  </a>
+                ))}
+              </div>
+            </div>
+
+            <!-- Popular Tags -->
+            <div class="sidebar-section">
+              <h3 class="sidebar-title">Tags Populares</h3>
+              <div class="tags-cloud">
+                {tags.slice(0, 15).map(({ tag, count }) => (
+                  <a href={`/blog/tag/${tag}`} class="tag-link">
+                    {tag}
+                    <span class="tag-count">({count})</span>
+                  </a>
+                ))}
+              </div>
+            </div>
+          </aside>
+
+          <!-- Posts Grid -->
+          <main class="blog-main">
+            {posts.length > 0 ? (
+              <div class="posts-grid">
+                {posts.map((post) => (
+                  <PostCard 
+                    client:visible 
+                    post={post} 
+                    featured={post.data.featured}
+                  />
+                ))}
+              </div>
+            ) : (
+              <div class="empty-state">
+                <p>No hay posts publicados aún.</p>
+              </div>
+            )}
+          </main>
+        </div>
+      </div>
+    </section>
+
+    <!-- Footer -->
+    <footer class="footer">
+      <div class="container-jony">
+        <p style="text-align: center; color: var(--color-gray-500); font-size: 0.875rem;">
+          © 2025 Douglas Rujana
+        </p>
+      </div>
+    </footer>
+  </body>
+</html>
+
+<style is:global>
+  @import '../../styles/jony-ive.css';
+</style>
+
+<style>
+  /* Header */
+  .blog-header {
+    padding: var(--space-lg) 0;
+    border-bottom: 1px solid var(--color-gray-200);
+    position: sticky;
+    top: 0;
+    background: rgba(255, 255, 255, 0.9);
+    backdrop-filter: blur(10px);
+    z-index: 100;
+  }
+
+  .blog-nav {
+    display: flex;
+    align-items: center;
+    gap: var(--space-lg);
+  }
+
+  .nav-link {
+    display: flex;
+    align-items: center;
+    gap: var(--space-xs);
+    font-size: 0.9375rem;
+    color: var(--color-gray-700);
+    transition: color var(--transition-base);
+  }
+
+  .nav-link:hover {
+    color: var(--color-gray-900);
+  }
+
+  .nav-title {
+    font-size: 1.25rem;
+    font-weight: 400;
+    color: var(--color-gray-900);
+  }
+
+  /* Hero */
+  .blog-hero {
+    padding: var(--space-2xl) 0;
+    text-align: center;
+  }
+
+  .hero-title {
+    font-size: clamp(2.5rem, 5vw, 4rem);
+    font-weight: 300;
+    letter-spacing: -0.02em;
+    margin-bottom: var(--space-md);
+  }
+
+  .hero-description {
+    font-size: clamp(1rem, 2vw, 1.125rem);
+    font-weight: 300;
+    color: var(--color-gray-600);
+    line-height: 1.7;
+    max-width: 600px;
+    margin: 0 auto var(--space-xl);
+  }
+
+  .hero-stats {
+    display: flex;
+    justify-content: center;
+    gap: var(--space-xl);
+    flex-wrap: wrap;
+  }
+
+  .stat {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: var(--space-xs);
+  }
+
+  .stat strong {
+    font-size: 2rem;
+    font-weight: 300;
+    color: var(--color-gray-900);
+  }
+
+  .stat span {
+    font-size: 0.875rem;
+    color: var(--color-gray-500);
+  }
+
+  /* Layout */
+  .blog-content {
+    padding: var(--space-2xl) 0;
+  }
+
+  .blog-layout {
+    display: grid;
+    grid-template-columns: 280px 1fr;
+    gap: var(--space-2xl);
+    align-items: start;
+  }
+
+  /* Sidebar */
+  .blog-sidebar {
+    position: sticky;
+    top: calc(var(--space-2xl) + 60px);
+  }
+
+  .sidebar-section {
+    margin-bottom: var(--space-xl);
+  }
+
+  .sidebar-title {
+    font-size: 0.875rem;
+    font-weight: 500;
+    color: var(--color-gray-900);
+    text-transform: uppercase;
+    letter-spacing: 0.05em;
+    margin-bottom: var(--space-md);
+  }
+
+  /* Categories */
+  .category-list {
+    display: flex;
+    flex-direction: column;
+    gap: var(--space-xs);
+  }
+
+  .category-item {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding: var(--space-sm) var(--space-md);
+    border-radius: var(--radius-sm);
+    font-size: 0.9375rem;
+    color: var(--color-gray-700);
+    transition: all var(--transition-base);
+  }
+
+  .category-item:hover {
+    background: var(--color-gray-100);
+    color: var(--color-gray-900);
+    transform: translateX(4px);
+  }
+
+  .category-count {
+    font-size: 0.8125rem;
+    color: var(--color-gray-500);
+  }
+
+  /* Tags Cloud */
+  .tags-cloud {
+    display: flex;
+    flex-wrap: wrap;
+    gap: var(--space-sm);
+  }
+
+  .tag-link {
+    font-size: 0.8125rem;
+    color: var(--color-gray-600);
+    transition: color var(--transition-base);
+  }
+
+  .tag-link:hover {
+    color: var(--color-accent);
+  }
+
+  .tag-count {
+    color: var(--color-gray-400);
+  }
+
+  /* Posts Grid */
+  .posts-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(320px, 1fr));
+    gap: var(--space-lg);
+  }
+
+  /* Empty state */
+  .empty-state {
+    text-align: center;
+    padding: var(--space-2xl);
+    color: var(--color-gray-500);
+  }
+
+  /* Footer */
+  .footer {
+    padding: var(--space-xl) 0;
+    margin-top: var(--space-2xl);
+    border-top: 1px solid var(--color-gray-200);
+  }
+
+  /* Responsive */
+  @media (max-width: 1024px) {
+    .blog-layout {
+      grid-template-columns: 1fr;
+    }
+
+    .blog-sidebar {
+      position: static;
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+      gap: var(--space-lg);
+    }
+  }
+
+  @media (max-width: 768px) {
+    .blog-sidebar {
+      grid-template-columns: 1fr;
+    }
+
+    .posts-grid {
+      grid-template-columns: 1fr;
+    }
+
+    .hero-stats {
+      gap: var(--space-lg);
+    }
+  }
+</style>
