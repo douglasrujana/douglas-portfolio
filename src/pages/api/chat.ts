@@ -6,14 +6,14 @@
  */
 
 import type { APIRoute } from 'astro';
-import { LLMFactory } from '@infrastructure/adapters/llm/LLMFactory';
+import { LLMFactory } from '@infrastructure/adapters/llm/llm-factory';
 import { env } from '@infrastructure/config/env';
 import {
   GenerateAIResponseUseCase,
   buildPortfolioContext,
   type ChatMessage,
 } from '@application/use-cases/chat/GenerateAIResponse';
-import { projects } from '../../data/projects';
+import { projects } from '@/data/projects';
 
 // Rate limiting simple (en memoria)
 const requestCounts = new Map<string, { count: number; resetTime: number }>();

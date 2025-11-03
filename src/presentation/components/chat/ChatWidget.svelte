@@ -247,8 +247,8 @@
 
     <!-- Messages -->
     <div class="chat-messages" bind:this={messagesContainer}>
-      {#each messages as message (message.id)}
-        <div class="message message-{message.role}">
+            {#each messages as message (message.id)}
+        <div class="message message-{message.role} fade-in-jony">
           <div class="message-bubble">
             <p>{message.content}</p>
             {#if message.isStreaming}
@@ -468,14 +468,13 @@
     gap: var(--space-md);
   }
 
-  .message {
+    .message {
     display: flex;
-    animation: fadeIn 0.3s ease-out;
   }
 
-  @keyframes fadeIn {
-    from { opacity: 0; transform: translateY(10px); }
-    to { opacity: 1; transform: translateY(0); }
+  /* La animación de entrada se gestiona con la clase global fade-in-jony */
+  .message.fade-in-jony {
+    animation: fadeIn var(--transition-base) ease-out;
   }
 
   .message-user {

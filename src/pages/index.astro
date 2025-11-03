@@ -11,6 +11,7 @@
 
 import Hero from '@presentation/components/portfolio/Hero.svelte';
 import ProjectsGrid from '@presentation/components/portfolio/ProjectsGrid.svelte';
+import ChatIsland from '@presentation/islands/ChatIsland.astro'; // Importación de ChatIsland
 import { projects } from '../data/projects';
 
 // Configuración del Hero
@@ -203,6 +204,9 @@ const siteUrl = 'https://douglasrujana.com'; // Cambiar por tu dominio
         heroData.linkedinUrl
       ]
     })} />
+
+    <!-- Chat AI Island -->
+    <ChatIsland />
   </body>
 </html>
 

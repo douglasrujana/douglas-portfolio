@@ -1,12 +1,9 @@
 ---
 /**
- * Chat Island
- * 
- * Wrapper de Astro para el ChatWidget
- * Se carga de forma lazy con client:idle para no afectar performance
+ * Astro Island for the Chat Widget.
+ * This component acts as a server-rendered container that loads the
+ * interactive Svelte component on the client when it becomes visible.
  */
-
-import ChatWidget from '../components/chat/ChatWidget.svelte';
+import ChatWidget from '@presentation/components/chat/ChatWidget.svelte';
 ---
-
-<ChatWidget client:idle />
+<ChatWidget client:visible />

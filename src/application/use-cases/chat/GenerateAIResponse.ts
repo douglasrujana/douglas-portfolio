@@ -9,13 +9,12 @@
  * Siguiendo DIP: Depende de abstracciones (ILLMProvider)
  */
 
-import type { ILLMProvider } from '@core/ports/ILLMProvider';
+import type { ILLMProvider } from '@core/ports/llm-port-interface';
 
 export interface ChatMessage {
-  id: string;
+    id: string;
   role: 'user' | 'assistant' | 'system';
   content: string;
-  timestamp: Date;
 }
 
 export interface ChatContext {
