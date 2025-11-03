@@ -1,0 +1,12 @@
+---
+/**
+ * Chat Island
+ * 
+ * Wrapper de Astro para el ChatWidget
+ * Se carga de forma lazy con client:idle para no afectar performance
+ */
+
+import ChatWidget from '../components/chat/ChatWidget.svelte';
+---
+
+<ChatWidget client:idle />
