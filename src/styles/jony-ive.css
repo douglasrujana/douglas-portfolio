@@ -1,0 +1,370 @@
+/**
+ * Jony Ive Design System
+ * 
+ * Principios:
+ * 1. Simplicidad radical - eliminar lo innecesario
+ * 2. Jerarquía clara sin gritar
+ * 3. Espacios negativos como elemento de diseño
+ * 4. Materiales honestos (no skeuomorfismo)
+ * 5. Animaciones sutiles, nunca distractoras
+ * 6. Tipografía limpia y legible
+ */
+
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+/* ========== VARIABLES GLOBALES ========== */
+@layer base {
+  :root {
+    /* Neutrales - Escala de grises refinada inspirada en productos Apple */
+    --color-white: #ffffff;
+    --color-gray-50: #fafafa;
+    --color-gray-100: #f5f5f5;
+    --color-gray-200: #e8e8e8;
+    --color-gray-300: #d4d4d4;
+    --color-gray-400: #a3a3a3;
+    --color-gray-500: #737373;
+    --color-gray-600: #525252;
+    --color-gray-700: #404040;
+    --color-gray-800: #262626;
+    --color-gray-900: #171717;
+    --color-black: #000000;
+
+    /* Acento - Un solo color para crear jerarquía */
+    --color-accent: #007aff; /* iOS Blue */
+    --color-accent-hover: #0051d5;
+    --color-accent-light: rgba(0, 122, 255, 0.1);
+
+    /* Tipografía - Sistema fonts para máxima legibilidad */
+    --font-system: -apple-system, BlinkMacSystemFont, 'SF Pro Display', 'Segoe UI',
+      'Helvetica Neue', Arial, sans-serif;
+    --font-mono: 'SF Mono', 'Fira Code', 'Consolas', 'Monaco', monospace;
+
+    /* Espaciado - Escala consistente basada en 4px */
+    --space-xs: 0.25rem; /* 4px */
+    --space-sm: 0.5rem; /* 8px */
+    --space-md: 1rem; /* 16px */
+    --space-lg: 2rem; /* 32px */
+    --space-xl: 4rem; /* 64px */
+    --space-2xl: 8rem; /* 128px */
+
+    /* Transiciones - Duración basada en material iOS */
+    --transition-fast: 150ms cubic-bezier(0.4, 0, 0.2, 1);
+    --transition-base: 300ms cubic-bezier(0.4, 0, 0.2, 1);
+    --transition-slow: 500ms cubic-bezier(0.4, 0, 0.2, 1);
+
+    /* Sombras - Muy sutiles, casi imperceptibles */
+    --shadow-sm: 0 1px 2px rgba(0, 0, 0, 0.05);
+    --shadow-md: 0 4px 12px rgba(0, 0, 0, 0.08);
+    --shadow-lg: 0 8px 24px rgba(0, 0, 0, 0.12);
+    --shadow-xl: 0 16px 48px rgba(0, 0, 0, 0.15);
+
+    /* Radios - Sutilmente redondeados */
+    --radius-sm: 8px;
+    --radius-md: 12px;
+    --radius-lg: 16px;
+    --radius-xl: 24px;
+    --radius-full: 9999px;
+
+    /* Z-index - Layers semánticos */
+    --z-base: 1;
+    --z-dropdown: 100;
+    --z-sticky: 200;
+    --z-modal: 300;
+    --z-tooltip: 400;
+  }
+
+  /* Reset y fundamentos */
+  * {
+    box-sizing: border-box;
+  }
+
+  html {
+    -webkit-font-smoothing: antialiased;
+    -moz-osx-font-smoothing: grayscale;
+    text-rendering: optimizeLegibility;
+    scroll-behavior: smooth;
+  }
+
+  body {
+    margin: 0;
+    padding: 0;
+    font-family: var(--font-system);
+    font-size: 16px;
+    line-height: 1.6;
+    color: var(--color-gray-900);
+    background-color: var(--color-white);
+  }
+
+  /* Tipografía base */
+  h1,
+  h2,
+  h3,
+  h4,
+  h5,
+  h6 {
+    margin: 0;
+    font-weight: 300; /* Light weight - estilo Jony Ive */
+    letter-spacing: -0.02em; /* Slight tightening */
+    line-height: 1.2;
+  }
+
+  h1 {
+    font-size: clamp(2.5rem, 5vw, 4.5rem);
+  }
+
+  h2 {
+    font-size: clamp(2rem, 4vw, 3.5rem);
+  }
+
+  h3 {
+    font-size: clamp(1.5rem, 3vw, 2.5rem);
+  }
+
+  h4 {
+    font-size: clamp(1.25rem, 2.5vw, 2rem);
+  }
+
+  p {
+    margin: 0;
+    font-weight: 300;
+    line-height: 1.7;
+  }
+
+  a {
+    color: inherit;
+    text-decoration: none;
+    transition: color var(--transition-base);
+  }
+
+  a:hover {
+    color: var(--color-accent);
+  }
+
+  /* Selection */
+  ::selection {
+    background-color: var(--color-accent-light);
+    color: var(--color-gray-900);
+  }
+}
+
+/* ========== COMPONENTES REUTILIZABLES ========== */
+@layer components {
+  /* Contenedor principal */
+  .container-jony {
+    width: 100%;
+    max-width: 1200px;
+    margin: 0 auto;
+    padding: 0 var(--space-lg);
+  }
+
+  /* Sección con espaciado vertical consistente */
+  .section-jony {
+    padding: var(--space-2xl) 0;
+  }
+
+  /* Card - Estilo minimalista */
+  .card-jony {
+    background: var(--color-white);
+    border-radius: var(--radius-lg);
+    padding: var(--space-lg);
+    box-shadow: var(--shadow-sm);
+    transition: box-shadow var(--transition-base), transform var(--transition-base);
+  }
+
+  .card-jony:hover {
+    box-shadow: var(--shadow-lg);
+    transform: translateY(-2px);
+  }
+
+  /* Botones - Sistema unificado */
+  .btn-jony {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    gap: var(--space-sm);
+    padding: var(--space-md) var(--space-lg);
+    font-family: var(--font-system);
+    font-size: 1rem;
+    font-weight: 400;
+    border: none;
+    border-radius: var(--radius-md);
+    cursor: pointer;
+    transition: all var(--transition-base);
+    white-space: nowrap;
+  }
+
+  .btn-jony:disabled {
+    opacity: 0.4;
+    cursor: not-allowed;
+  }
+
+  .btn-jony:active:not(:disabled) {
+    transform: scale(0.98);
+  }
+
+  /* Botón primario */
+  .btn-primary {
+    background: var(--color-gray-900);
+    color: var(--color-white);
+  }
+
+  .btn-primary:hover:not(:disabled) {
+    background: var(--color-gray-800);
+    box-shadow: var(--shadow-md);
+  }
+
+  /* Botón secundario */
+  .btn-secondary {
+    background: var(--color-gray-100);
+    color: var(--color-gray-900);
+  }
+
+  .btn-secondary:hover:not(:disabled) {
+    background: var(--color-gray-200);
+  }
+
+  /* Botón fantasma */
+  .btn-ghost {
+    background: transparent;
+    color: var(--color-gray-700);
+  }
+
+  .btn-ghost:hover:not(:disabled) {
+    background: var(--color-gray-50);
+  }
+
+  /* Input fields */
+  .input-jony {
+    width: 100%;
+    padding: var(--space-md);
+    font-family: var(--font-system);
+    font-size: 1rem;
+    color: var(--color-gray-900);
+    background: var(--color-white);
+    border: 1px solid var(--color-gray-200);
+    border-radius: var(--radius-md);
+    transition: border-color var(--transition-base), box-shadow var(--transition-base);
+  }
+
+  .input-jony:focus {
+    outline: none;
+    border-color: var(--color-accent);
+    box-shadow: 0 0 0 3px var(--color-accent-light);
+  }
+
+  .input-jony::placeholder {
+    color: var(--color-gray-400);
+  }
+
+  /* Badge/Tag */
+  .badge-jony {
+    display: inline-flex;
+    align-items: center;
+    padding: var(--space-xs) var(--space-md);
+    font-size: 0.875rem;
+    font-weight: 400;
+    color: var(--color-gray-700);
+    background: var(--color-gray-100);
+    border-radius: var(--radius-full);
+    white-space: nowrap;
+  }
+
+  /* Divider */
+  .divider-jony {
+    height: 1px;
+    background: var(--color-gray-200);
+    border: none;
+    margin: var(--space-xl) 0;
+  }
+}
+
+/* ========== UTILIDADES ========== */
+@layer utilities {
+  /* Glassmorphism sutil (para overlays) */
+  .glass-jony {
+    background: rgba(255, 255, 255, 0.8);
+    backdrop-filter: blur(10px);
+    -webkit-backdrop-filter: blur(10px);
+  }
+
+  /* Text gradient */
+  .text-gradient-jony {
+    background: linear-gradient(135deg, var(--color-gray-900) 0%, var(--color-gray-600) 100%);
+    -webkit-background-clip: text;
+    -webkit-text-fill-color: transparent;
+    background-clip: text;
+  }
+
+  /* Fade in animation */
+  .fade-in-jony {
+    animation: fadeIn var(--transition-slow) ease-out;
+  }
+
+  @keyframes fadeIn {
+    from {
+      opacity: 0;
+      transform: translateY(20px);
+    }
+    to {
+      opacity: 1;
+      transform: translateY(0);
+    }
+  }
+
+  /* Slide in animation */
+  .slide-in-jony {
+    animation: slideIn var(--transition-slow) ease-out;
+  }
+
+  @keyframes slideIn {
+    from {
+      opacity: 0;
+      transform: translateX(-20px);
+    }
+    to {
+      opacity: 1;
+      transform: translateX(0);
+    }
+  }
+
+  /* Focus ring - accesibilidad */
+  .focus-ring-jony:focus-visible {
+    outline: 2px solid var(--color-accent);
+    outline-offset: 2px;
+  }
+
+  /* Scroll snap */
+  .scroll-snap-jony {
+    scroll-snap-type: y mandatory;
+  }
+
+  .scroll-snap-jony > * {
+    scroll-snap-align: start;
+  }
+}
+
+/* ========== RESPONSIVE ========== */
+@media (max-width: 768px) {
+  :root {
+    --space-xl: 3rem;
+    --space-2xl: 6rem;
+  }
+
+  .section-jony {
+    padding: var(--space-xl) 0;
+  }
+}
+
+/* ========== PRINT STYLES ========== */
+@media print {
+  body {
+    background: white;
+  }
+
+  .btn-jony,
+  .card-jony {
+    box-shadow: none;
+  }
+}

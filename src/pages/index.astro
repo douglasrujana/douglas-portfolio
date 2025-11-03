@@ -1,16 +1,358 @@
 ---
+/**
+ * Homepage - Portfolio de Douglas Rujana
+ * 
+ * Esta es la landing page principal con:
+ * - Hero section
+ * - Proyectos destacados
+ * - Skills
+ * - CTA de contacto
+ */
 
+import Hero from '@presentation/components/portfolio/Hero.svelte';
+import ProjectsGrid from '@presentation/components/portfolio/ProjectsGrid.svelte';
+import { projects } from '../data/projects';
+
+// Configuración del Hero
+const heroData = {
+  name: 'Douglas Rujana',
+  title: 'Desarrollador Full Stack+AI | QA | DevOps | Cloud-native',
+  description: 'Creando experiencias digitales excepcionales mediante código limpio, diseño intuitivo y atención meticulosa al detalle. Especializado en arquitecturas escalables y soluciones innovadoras con IA.',
+  githubUrl: 'https://github.com/douglasrujana',
+  linkedinUrl: 'https://linkedin.com/in/douglasrujana',
+  email: 'tu@email.com'
+};
+
+// Meta tags para SEO
+const siteTitle = 'Douglas Rujana - Full Stack Developer & AI Specialist';
+const siteDescription = 'Portfolio de Douglas Rujana. Desarrollador Full Stack especializado en arquitecturas limpias, IA y soluciones cloud-native.';
+const siteUrl = 'https://douglasrujana.com'; // Cambiar por tu dominio
 ---
 
-<html lang="en">
-	<head>
-		<meta charset="utf-8" />
-		<link rel="icon" type="image/svg+xml" href="/favicon.svg" />
-		<meta name="viewport" content="width=device-width" />
-		<meta name="generator" content={Astro.generator} />
-		<title>Astro</title>
-	</head>
-	<body>
-		<h1>Astro</h1>
-	</body>
+<!DOCTYPE html>
+<html lang="es">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    
+    <!-- SEO Meta Tags -->
+    <title>{siteTitle}</title>
+    <meta name="description" content={siteDescription} />
+    <meta name="author" content="Douglas Rujana" />
+    <meta name="keywords" content="Douglas Rujana, Full Stack Developer, AI Developer, DevOps, Cloud Native, Arquitectura Hexagonal, Clean Code" />
+    
+    <!-- Open Graph / Facebook -->
+    <meta property="og:type" content="website" />
+    <meta property="og:url" content={siteUrl} />
+    <meta property="og:title" content={siteTitle} />
+    <meta property="og:description" content={siteDescription} />
+    <meta property="og:image" content={`${siteUrl}/og-image.png`} />
+    
+    <!-- Twitter -->
+    <meta property="twitter:card" content="summary_large_image" />
+    <meta property="twitter:url" content={siteUrl} />
+    <meta property="twitter:title" content={siteTitle} />
+    <meta property="twitter:description" content={siteDescription} />
+    <meta property="twitter:image" content={`${siteUrl}/og-image.png`} />
+    
+    <!-- Favicon -->
+    <link rel="icon" type="image/svg+xml" href="/favicon.svg" />
+    
+    <!-- Fonts Preload (opcional: si usas fonts personalizadas) -->
+    <!-- <link rel="preload" href="/fonts/sf-pro.woff2" as="font" type="font/woff2" crossorigin> -->
+    
+    <!-- Canonical URL -->
+    <link rel="canonical" href={siteUrl} />
+  </head>
+  
+  <body>
+    <!-- Hero Section -->
+    <Hero 
+      client:load
+      name={heroData.name}
+      title={heroData.title}
+      description={heroData.description}
+      githubUrl={heroData.githubUrl}
+      linkedinUrl={heroData.linkedinUrl}
+      email={heroData.email}
+    />
+
+    <!-- Projects Section -->
+    <section id="projects" class="section-jony">
+      <div class="container-jony">
+        <div class="section-header">
+          <h2 class="section-title">Proyectos Destacados</h2>
+          <p class="section-description">
+            Una selección de proyectos que demuestran mi experiencia en desarrollo full stack,
+            arquitecturas limpias y soluciones innovadoras.
+          </p>
+        </div>
+        
+        <ProjectsGrid client:load projects={projects} />
+      </div>
+    </section>
+
+    <!-- Technologies Section -->
+    <section class="section-jony technologies-section">
+      <div class="container-jony">
+        <div class="section-header">
+          <h2 class="section-title">Stack Tecnológico</h2>
+          <p class="section-description">
+            Tecnologías y herramientas que domino para construir soluciones escalables y mantenibles.
+          </p>
+        </div>
+        
+        <div class="tech-grid">
+          <div class="tech-category">
+            <h3 class="tech-category-title">Frontend</h3>
+            <div class="tech-items">
+              <span class="tech-item">Astro</span>
+              <span class="tech-item">Svelte</span>
+              <span class="tech-item">TypeScript</span>
+              <span class="tech-item">Tailwind CSS</span>
+            </div>
+          </div>
+
+          <div class="tech-category">
+            <h3 class="tech-category-title">Backend</h3>
+            <div class="tech-items">
+              <span class="tech-item">Node.js</span>
+              <span class="tech-item">Express</span>
+              <span class="tech-item">PHP</span>
+              <span class="tech-item">Laravel</span>
+            </div>
+          </div>
+
+          <div class="tech-category">
+            <h3 class="tech-category-title">Database</h3>
+            <div class="tech-items">
+              <span class="tech-item">MySQL</span>
+              <span class="tech-item">MongoDB</span>
+              <span class="tech-item">PostgreSQL</span>
+            </div>
+          </div>
+
+          <div class="tech-category">
+            <h3 class="tech-category-title">AI & DevOps</h3>
+            <div class="tech-items">
+              <span class="tech-item">Gemini AI</span>
+              <span class="tech-item">Docker</span>
+              <span class="tech-item">GitHub Actions</span>
+              <span class="tech-item">Vercel</span>
+            </div>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- Contact Section -->
+    <section id="contact" class="section-jony contact-section">
+      <div class="container-jony">
+        <div class="contact-content">
+          <h2 class="section-title">Trabajemos Juntos</h2>
+          <p class="section-description" style="max-width: 600px; margin: 0 auto var(--space-xl);">
+            ¿Tienes un proyecto en mente? ¿Necesitas ayuda con arquitectura o desarrollo?
+            Siempre estoy abierto a discutir nuevas ideas y oportunidades.
+          </p>
+          <div class="contact-buttons">
+            <a href="mailto:tu@email.com" class="btn-jony btn-primary">
+              Enviar Email
+            </a>
+            <a href={heroData.linkedinUrl} target="_blank" rel="noopener noreferrer" class="btn-jony btn-secondary">
+              Conectar en LinkedIn
+            </a>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- Footer -->
+    <footer class="footer">
+      <div class="container-jony">
+        <div class="footer-content">
+          <p class="footer-text">
+            © 2025 Douglas Rujana. Diseñado con atención al detalle.
+          </p>
+          <p class="footer-tech">
+            Construido con 
+            <a href="https://astro.build" target="_blank" rel="noopener">Astro</a>,
+            <a href="https://svelte.dev" target="_blank" rel="noopener">Svelte</a>
+            y arquitectura hexagonal.
+          </p>
+          <div class="footer-links">
+            <a href={heroData.githubUrl} target="_blank" rel="noopener">GitHub</a>
+            <span class="footer-separator">·</span>
+            <a href={heroData.linkedinUrl} target="_blank" rel="noopener">LinkedIn</a>
+            <span class="footer-separator">·</span>
+            <a href="mailto:tu@email.com">Email</a>
+          </div>
+        </div>
+      </div>
+    </footer>
+
+    <!-- Structured Data for SEO -->
+    <script type="application/ld+json" set:html={JSON.stringify({
+      "@context": "https://schema.org",
+      "@type": "Person",
+      "name": "Douglas Rujana",
+      "url": siteUrl,
+      "jobTitle": "Full Stack Developer & AI Specialist",
+      "description": siteDescription,
+      "sameAs": [
+        heroData.githubUrl,
+        heroData.linkedinUrl
+      ]
+    })} />
+  </body>
 </html>
+
+<style is:global>
+  @import '../styles/jony-ive.css';
+</style>
+
+<style>
+  /* Section styling */
+  .section-header {
+    text-align: center;
+    margin-bottom: var(--space-xl);
+  }
+
+  .section-title {
+    font-size: clamp(2.5rem, 5vw, 3.5rem);
+    font-weight: 300;
+    letter-spacing: -0.02em;
+    margin-bottom: var(--space-md);
+    color: var(--color-gray-900);
+  }
+
+  .section-description {
+    font-size: clamp(1rem, 2vw, 1.125rem);
+    font-weight: 300;
+    color: var(--color-gray-600);
+    line-height: 1.7;
+    max-width: 700px;
+    margin: 0 auto;
+  }
+
+  /* Technologies Section */
+  .technologies-section {
+    background: var(--color-gray-50);
+  }
+
+  .tech-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+    gap: var(--space-xl);
+  }
+
+  .tech-category {
+    text-align: center;
+  }
+
+  .tech-category-title {
+    font-size: 1.125rem;
+    font-weight: 400;
+    color: var(--color-gray-900);
+    margin-bottom: var(--space-md);
+  }
+
+  .tech-items {
+    display: flex;
+    flex-direction: column;
+    gap: var(--space-sm);
+  }
+
+  .tech-item {
+    padding: var(--space-sm) var(--space-md);
+    background: var(--color-white);
+    border-radius: var(--radius-md);
+    font-size: 0.9375rem;
+    font-weight: 300;
+    color: var(--color-gray-700);
+    transition: all var(--transition-base);
+  }
+
+  .tech-item:hover {
+    background: var(--color-gray-900);
+    color: var(--color-white);
+    transform: translateX(4px);
+  }
+
+  /* Contact Section */
+  .contact-section {
+    background: linear-gradient(180deg, var(--color-white) 0%, var(--color-gray-50) 100%);
+  }
+
+  .contact-content {
+    text-align: center;
+  }
+
+  .contact-buttons {
+    display: flex;
+    justify-content: center;
+    gap: var(--space-md);
+    flex-wrap: wrap;
+  }
+
+  /* Footer */
+  .footer {
+    padding: var(--space-xl) var(--space-lg);
+    border-top: 1px solid var(--color-gray-200);
+  }
+
+  .footer-content {
+    text-align: center;
+  }
+
+  .footer-text,
+  .footer-tech {
+    font-size: 0.875rem;
+    font-weight: 300;
+    color: var(--color-gray-500);
+    margin-bottom: var(--space-sm);
+  }
+
+  .footer-tech a {
+    color: var(--color-accent);
+    transition: color var(--transition-base);
+  }
+
+  .footer-tech a:hover {
+    color: var(--color-accent-hover);
+  }
+
+  .footer-links {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    gap: var(--space-sm);
+    margin-top: var(--space-md);
+  }
+
+  .footer-links a {
+    font-size: 0.875rem;
+    color: var(--color-gray-600);
+    transition: color var(--transition-base);
+  }
+
+  .footer-links a:hover {
+    color: var(--color-gray-900);
+  }
+
+  .footer-separator {
+    color: var(--color-gray-400);
+  }
+
+  /* Responsive */
+  @media (max-width: 768px) {
+    .tech-grid {
+      grid-template-columns: 1fr;
+      gap: var(--space-lg);
+    }
+
+    .contact-buttons {
+      flex-direction: column;
+      align-items: stretch;
+    }
+  }
+</style>
