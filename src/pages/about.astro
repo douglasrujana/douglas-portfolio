@@ -1,0 +1,631 @@
+---
+/**
+ * About/CV Page
+ * 
+ * Página ATS-friendly con CV completo
+ * Incluye JSON-LD para SEO
+ * Data mock fácil de actualizar
+ */
+
+import ExperienceTimeline from '@presentation/components/cv/ExperienceTimeline.svelte';
+import SkillsGrid from '@presentation/components/cv/SkillsGrid.svelte';
+import ChatIsland from '@presentation/islands/ChatIsland.astro';
+import {
+  personalInfo,
+  experiences,
+  education,
+  certifications,
+  skills,
+  languages,
+  testimonials,
+  getTotalYearsOfExperience,
+  generatePersonSchema,
+} from '../data/cv';
+
+const yearsOfExperience = getTotalYearsOfExperience();
+const personSchema = generatePersonSchema();
+
+// Meta
+const title = `${personalInfo.name} - CV & About`;
+const description = `${personalInfo.title} con ${yearsOfExperience}+ años de experiencia. ${personalInfo.summary}`;
+---
+
+<!DOCTYPE html>
+<html lang="es">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>{title}</title>
+    <meta name="description" content={description} />
+    
+    <!-- Open Graph -->
+    <meta property="og:title" content={title} />
+    <meta property="og:description" content={description} />
+    <meta property="og:type" content="profile" />
+    <meta property="og:image" content={personalInfo.avatar} />
+    
+    <!-- Structured Data (ATS & SEO) -->
+    <script type="application/ld+json" set:html={JSON.stringify(personSchema)} />
+    
+    <link rel="icon" type="image/svg+xml" href="/favicon.svg" />
+  </head>
+  
+  <body>
+    <!-- Header/Nav -->
+    <header class="page-header">
+      <div class="container-jony">
+        <nav class="page-nav">
+          <a href="/" class="nav-link">
+            <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+              <path d="M3 9l9-7 9 7v11a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2z"></path>
+            </svg>
+            Inicio
+          </a>
+          <div class="nav-actions">
+            <a href="/blog" class="nav-link">Blog</a>
+            <a href={`mailto:${personalInfo.email}`} class="btn-jony btn-primary">
+              Contactar
+            </a>
+          </div>
+        </nav>
+      </div>
+    </header>
+
+    <!-- Hero -->
+    <section class="about-hero">
+      <div class="container-jony">
+        <div class="hero-content">
+          <div class="hero-text">
+            <h1 class="hero-title">{personalInfo.name}</h1>
+            <p class="hero-subtitle">{personalInfo.title}</p>
+            <p class="hero-summary">{personalInfo.summary}</p>
+            
+            <div class="hero-stats">
+              <div class="stat-item">
+                <strong>{yearsOfExperience}+</strong>
+                <span>Años de experiencia</span>
+              </div>
+              <div class="stat-item">
+                <strong>{experiences.length}</strong>
+                <span>Posiciones</span>
+              </div>
+              <div class="stat-item">
+                <strong>{certifications.length}</strong>
+                <span>Certificaciones</span>
+              </div>
+            </div>
+
+            <div class="hero-actions">
+              <a href="#experience" class="btn-jony btn-primary">
+                Ver experiencia
+              </a>
+              <a href="#download-cv" class="btn-jony btn-secondary">
+                <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                  <path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"></path>
+                  <polyline points="7 10 12 15 17 10"></polyline>
+                  <line x1="12" y1="15" x2="12" y2="3"></line>
+                </svg>
+                Descargar CV
+              </a>
+            </div>
+          </div>
+
+          <div class="hero-image">
+            <img src={personalInfo.avatar} alt={personalInfo.name} />
+            <div class="hero-contact">
+              <a href={personalInfo.linkedin} target="_blank" rel="noopener" class="contact-link">
+                <svg width="20" height="20" viewBox="0 0 24 24" fill="currentColor">
+                  <path d="M16 8a6 6 0 016 6v7h-4v-7a2 2 0 00-2-2 2 2 0 00-2 2v7h-4v-7a6 6 0 016-6zM2 9h4v12H2z"></path>
+                  <circle cx="4" cy="4" r="2"></circle>
+                </svg>
+                LinkedIn
+              </a>
+              <a href={personalInfo.github} target="_blank" rel="noopener" class="contact-link">
+                <svg width="20" height="20" viewBox="0 0 24 24" fill="currentColor">
+                  <path d="M9 19c-5 1.5-5-2.5-7-3m14 6v-3.87a3.37 3.37 0 00-.94-2.61c3.14-.35 6.44-1.54 6.44-7A5.44 5.44 0 0020 4.77 5.07 5.07 0 0019.91 1S18.73.65 16 2.48a13.38 13.38 0 00-7 0C6.27.65 5.09 1 5.09 1A5.07 5.07 0 005 4.77a5.44 5.44 0 00-1.5 3.78c0 5.42 3.3 6.61 6.44 7A3.37 3.37 0 009 18.13V22"></path>
+                </svg>
+                GitHub
+              </a>
+            </div>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- Experience -->
+    <section id="experience" class="section-jony">
+      <div class="container-jony">
+        <h2 class="section-title">Experiencia Laboral</h2>
+        <ExperienceTimeline client:visible experiences={experiences} />
+      </div>
+    </section>
+
+    <!-- Skills -->
+    <section id="skills" class="section-jony" style="background: var(--color-gray-50);">
+      <div class="container-jony">
+        <h2 class="section-title">Habilidades Técnicas</h2>
+        <SkillsGrid client:visible skills={skills} />
+      </div>
+    </section>
+
+    <!-- Education & Certifications -->
+    <section id="education" class="section-jony">
+      <div class="container-jony">
+        <div class="edu-cert-grid">
+          <!-- Education -->
+          <div class="edu-section">
+            <h2 class="section-title">Educación</h2>
+            {education.map((edu) => (
+              <div class="edu-card">
+                <h3 class="edu-degree">{edu.degree}</h3>
+                <p class="edu-field">{edu.field}</p>
+                <p class="edu-institution">{edu.institution}</p>
+                <p class="edu-location">{edu.location}</p>
+                <p class="edu-dates">{edu.startDate} - {edu.endDate}</p>
+                {edu.gpa && <p class="edu-gpa">GPA: {edu.gpa}</p>}
+                {edu.honors && (
+                  <div class="edu-honors">
+                    {edu.honors.map((honor) => (
+                      <span class="honor-badge">{honor}</span>
+                    ))}
+                  </div>
+                )}
+              </div>
+            ))}
+          </div>
+
+          <!-- Certifications -->
+          <div class="cert-section">
+            <h2 class="section-title">Certificaciones</h2>
+            <div class="cert-list">
+              {certifications.map((cert) => (
+                <div class="cert-card">
+                  <h3 class="cert-name">{cert.name}</h3>
+                  <p class="cert-issuer">{cert.issuer}</p>
+                  <time class="cert-date">{cert.date}</time>
+                  {cert.credentialUrl && (
+                    <a href={cert.credentialUrl} target="_blank" rel="noopener" class="cert-link">
+                      Ver credencial →
+                    </a>
+                  )}
+                </div>
+              ))}
+            </div>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- Testimonials -->
+    <section id="testimonials" class="section-jony" style="background: var(--color-gray-50);">
+      <div class="container-jony">
+        <h2 class="section-title">Testimonios</h2>
+        <div class="testimonials-grid">
+          {testimonials.map((test) => (
+            <div class="testimonial-card">
+              <p class="testimonial-text">"{test.text}"</p>
+              <div class="testimonial-author">
+                {test.avatar && (
+                  <img src={test.avatar} alt={test.name} class="author-avatar" />
+                )}
+                <div class="author-info">
+                  <strong class="author-name">{test.name}</strong>
+                  <p class="author-position">{test.position} en {test.company}</p>
+                  {test.linkedin && (
+                    <a href={test.linkedin} target="_blank" rel="noopener" class="author-linkedin">
+                      Ver perfil →
+                    </a>
+                  )}
+                </div>
+              </div>
+            </div>
+          ))}
+        </div>
+      </div>
+    </section>
+
+    <!-- Languages -->
+    <section class="section-jony">
+      <div class="container-jony">
+        <h2 class="section-title">Idiomas</h2>
+        <div class="languages-list">
+          {languages.map((lang) => (
+            <div class="language-item">
+              <span class="language-name">{lang.name}</span>
+              <span class="language-level">{lang.proficiency}</span>
+            </div>
+          ))}
+        </div>
+      </div>
+    </section>
+
+    <!-- Download CV Section -->
+    <section id="download-cv" class="section-jony" style="background: var(--color-gray-50); text-align: center;">
+      <div class="container-jony">
+        <h2 class="section-title">¿Interesado en trabajar conmigo?</h2>
+        <p style="max-width: 600px; margin: 0 auto var(--space-xl); color: var(--color-gray-600);">
+          Descarga mi CV en formato PDF o contáctame directamente. Estoy disponible para
+          proyectos freelance y posiciones full-time remotas.
+        </p>
+        <div style="display: flex; justify-content: center; gap: var(--space-md); flex-wrap: wrap;">
+          <button class="btn-jony btn-primary">
+            <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+              <path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"></path>
+              <polyline points="7 10 12 15 17 10"></polyline>
+              <line x1="12" y1="15" x2="12" y2="3"></line>
+            </svg>
+            Descargar CV (PDF)
+          </button>
+          <a href={`mailto:${personalInfo.email}`} class="btn-jony btn-secondary">
+            Enviar Email
+          </a>
+        </div>
+      </div>
+    </section>
+
+    <!-- Footer -->
+    <footer class="footer">
+      <div class="container-jony">
+        <p style="text-align: center; color: var(--color-gray-500); font-size: 0.875rem;">
+          © 2025 {personalInfo.name}
+        </p>
+      </div>
+    </footer>
+
+    <!-- Chat Widget -->
+    <ChatIsland />
+
+    <!-- AOS Animation Library -->
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/aos/2.3.4/aos.js"></script>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/aos/2.3.4/aos.css" />
+    <script>
+      AOS.init({
+        duration: 800,
+        easing: 'ease-out',
+        once: true,
+      });
+    </script>
+  </body>
+</html>
+
+<style is:global>
+  @import '../styles/jony-ive.css';
+</style>
+
+<style>
+  /* Header */
+  .page-header {
+    padding: var(--space-lg) 0;
+    border-bottom: 1px solid var(--color-gray-200);
+    position: sticky;
+    top: 0;
+    background: rgba(255, 255, 255, 0.9);
+    backdrop-filter: blur(10px);
+    z-index: 100;
+  }
+
+  .page-nav {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+  }
+
+  .nav-link {
+    display: flex;
+    align-items: center;
+    gap: var(--space-xs);
+    font-size: 0.9375rem;
+    color: var(--color-gray-700);
+    transition: color var(--transition-base);
+  }
+
+  .nav-link:hover {
+    color: var(--color-gray-900);
+  }
+
+  .nav-actions {
+    display: flex;
+    align-items: center;
+    gap: var(--space-lg);
+  }
+
+  /* Hero */
+  .about-hero {
+    padding: var(--space-2xl) 0;
+  }
+
+  .hero-content {
+    display: grid;
+    grid-template-columns: 1.5fr 1fr;
+    gap: var(--space-2xl);
+    align-items: center;
+  }
+
+  .hero-title {
+    font-size: clamp(2.5rem, 5vw, 4rem);
+    font-weight: 300;
+    margin-bottom: var(--space-sm);
+  }
+
+  .hero-subtitle {
+    font-size: clamp(1.25rem, 3vw, 1.75rem);
+    color: var(--color-gray-600);
+    font-weight: 300;
+    margin-bottom: var(--space-lg);
+  }
+
+  .hero-summary {
+    font-size: 1.0625rem;
+    line-height: 1.7;
+    color: var(--color-gray-700);
+    margin-bottom: var(--space-xl);
+  }
+
+  .hero-stats {
+    display: flex;
+    gap: var(--space-xl);
+    margin-bottom: var(--space-xl);
+  }
+
+  .stat-item {
+    display: flex;
+    flex-direction: column;
+    gap: var(--space-xs);
+  }
+
+  .stat-item strong {
+    font-size: 2rem;
+    font-weight: 300;
+    color: var(--color-gray-900);
+  }
+
+  .stat-item span {
+    font-size: 0.875rem;
+    color: var(--color-gray-600);
+  }
+
+  .hero-actions {
+    display: flex;
+    gap: var(--space-md);
+    flex-wrap: wrap;
+  }
+
+  .hero-image {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: var(--space-lg);
+  }
+
+  .hero-image img {
+    width: 200px;
+    height: 200px;
+    border-radius: 50%;
+    border: 4px solid var(--color-gray-200);
+  }
+
+  .hero-contact {
+    display: flex;
+    gap: var(--space-md);
+  }
+
+  .contact-link {
+    display: flex;
+    align-items: center;
+    gap: var(--space-xs);
+    padding: var(--space-sm) var(--space-md);
+    background: var(--color-gray-100);
+    border-radius: var(--radius-md);
+    font-size: 0.875rem;
+    color: var(--color-gray-700);
+    transition: all var(--transition-base);
+  }
+
+  .contact-link:hover {
+    background: var(--color-gray-900);
+    color: var(--color-white);
+  }
+
+  /* Section Title */
+  .section-title {
+    font-size: 2.5rem;
+    font-weight: 300;
+    text-align: center;
+    margin-bottom: var(--space-xl);
+  }
+
+  /* Education & Certifications */
+  .edu-cert-grid {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: var(--space-2xl);
+  }
+
+  .edu-card {
+    background: var(--color-white);
+    padding: var(--space-lg);
+    border-radius: var(--radius-lg);
+    border: 1px solid var(--color-gray-200);
+  }
+
+  .edu-degree {
+    font-size: 1.25rem;
+    font-weight: 500;
+    margin-bottom: var(--space-xs);
+  }
+
+  .edu-field, .edu-institution {
+    color: var(--color-gray-700);
+    margin-bottom: var(--space-xs);
+  }
+
+  .edu-dates, .edu-location {
+    font-size: 0.875rem;
+    color: var(--color-gray-500);
+    margin-bottom: var(--space-xs);
+  }
+
+  .edu-honors {
+    display: flex;
+    gap: var(--space-xs);
+    flex-wrap: wrap;
+    margin-top: var(--space-md);
+  }
+
+  .honor-badge {
+    padding: var(--space-xs) var(--space-sm);
+    background: var(--color-accent-light);
+    color: var(--color-accent);
+    border-radius: var(--radius-sm);
+    font-size: 0.75rem;
+    font-weight: 500;
+  }
+
+  .cert-list {
+    display: flex;
+    flex-direction: column;
+    gap: var(--space-md);
+  }
+
+  .cert-card {
+    background: var(--color-white);
+    padding: var(--space-md);
+    border-radius: var(--radius-md);
+    border: 1px solid var(--color-gray-200);
+  }
+
+  .cert-name {
+    font-size: 1rem;
+    font-weight: 500;
+    margin-bottom: var(--space-xs);
+  }
+
+  .cert-issuer {
+    color: var(--color-gray-600);
+    margin-bottom: var(--space-xs);
+  }
+
+  .cert-date {
+    font-size: 0.875rem;
+    color: var(--color-gray-500);
+  }
+
+  .cert-link {
+    display: inline-block;
+    margin-top: var(--space-sm);
+    font-size: 0.875rem;
+    color: var(--color-accent);
+  }
+
+  /* Testimonials */
+  .testimonials-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(320px, 1fr));
+    gap: var(--space-lg);
+  }
+
+  .testimonial-card {
+    background: var(--color-white);
+    padding: var(--space-lg);
+    border-radius: var(--radius-lg);
+    border: 1px solid var(--color-gray-200);
+  }
+
+  .testimonial-text {
+    font-size: 1rem;
+    line-height: 1.7;
+    color: var(--color-gray-700);
+    margin-bottom: var(--space-lg);
+    font-style: italic;
+  }
+
+  .testimonial-author {
+    display: flex;
+    gap: var(--space-md);
+    align-items: center;
+  }
+
+  .author-avatar {
+    width: 48px;
+    height: 48px;
+    border-radius: 50%;
+  }
+
+  .author-name {
+    display: block;
+    color: var(--color-gray-900);
+    margin-bottom: var(--space-xs);
+  }
+
+  .author-position {
+    font-size: 0.875rem;
+    color: var(--color-gray-600);
+    margin-bottom: var(--space-xs);
+  }
+
+  .author-linkedin {
+    font-size: 0.875rem;
+    color: var(--color-accent);
+  }
+
+  /* Languages */
+  .languages-list {
+    display: flex;
+    justify-content: center;
+    gap: var(--space-xl);
+    flex-wrap: wrap;
+  }
+
+  .language-item {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: var(--space-xs);
+  }
+
+  .language-name {
+    font-size: 1.125rem;
+    font-weight: 500;
+  }
+
+  .language-level {
+    font-size: 0.875rem;
+    color: var(--color-gray-600);
+    text-transform: capitalize;
+  }
+
+  /* Footer */
+  .footer {
+    padding: var(--space-xl) 0;
+    border-top: 1px solid var(--color-gray-200);
+  }
+
+  /* Responsive */
+  @media (max-width: 1024px) {
+    .hero-content {
+      grid-template-columns: 1fr;
+    }
+
+    .hero-image {
+      order: -1;
+    }
+
+    .edu-cert-grid {
+      grid-template-columns: 1fr;
+    }
+  }
+
+  @media (max-width: 768px) {
+    .hero-stats {
+      gap: var(--space-lg);
+    }
+
+    .nav-actions {
+      gap: var(--space-md);
+    }
+
+    .testimonials-grid {
+      grid-template-columns: 1fr;
+    }
+  }
+</style>

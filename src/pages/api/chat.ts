@@ -7,7 +7,7 @@
 
 import type { APIRoute } from 'astro';
 import { LLMFactory } from '@infrastructure/adapters/llm/llm-factory';
-import { env } from '@infrastructure/config/env';
+import { getLlmConfigForProfile } from '@infrastructure/config/env';
 import {
   GenerateAIResponseUseCase,
   buildPortfolioContext,
@@ -90,11 +90,9 @@ export const POST: APIRoute = async ({ request, clientAddress }) => {
       );
     }
 
-    // Crear LLM provider
-    const llm = LLMFactory.create(env.LLM_PROVIDER, {
-      apiKey: env.GEMINI_API_KEY,
-      model: env.GEMINI_MODEL,
-    });
+    // Obtener la configuración para el perfil de chat ('fast')
+    const chatConfig = getLlmConfigForProfile('fast');
+    const llm = LLMFactory.create(chatConfig.provider, { apiKey: chatConfig.apiKey, model: chatConfig.model });
 
     // Crear use case
     const useCase = new GenerateAIResponseUseCase(llm);

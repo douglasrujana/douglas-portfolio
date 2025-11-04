@@ -1,4 +1,8 @@
 // src/infrastructure/config/env.ts
+
+// Carga las variables de entorno desde el archivo .env al inicio.
+// Esto asegura que process.env esté poblado antes de que Zod intente validarlo.
+import 'dotenv/config';
 import { z } from 'zod';
 
 /**
@@ -9,7 +13,10 @@ const envSchema = z.object({
   // LLM Configuration
   LLM_PROVIDER: z.enum(['gemini', 'openai', 'claude']).default('gemini'),
   GEMINI_API_KEY: z.string().min(1, 'GEMINI_API_KEY is required'),
-  GEMINI_MODEL: z.string().default('gemini-1.5-flash'),
+  // --- Modelos por Caso de Uso ---
+  GEMINI_CHAT_MODEL: z.string().default('gemini-2.0-flash-lite'),
+  GEMINI_BLOG_MODEL: z.string().default('gemini-2.0-flash-lite'),
+  GEMINI_DEV_MODEL: z.string().default('gemini-2.5-flash'),
 
   // Optional OpenAI (preparado para el futuro)
   OPENAI_API_KEY: z.string().optional(),
@@ -106,23 +113,49 @@ export const isDev = env.NODE_ENV === 'development';
 export const isTest = env.NODE_ENV === 'test';
 
 /**
- * Configuración del LLM activo
+ * Define los perfiles de capacidad de los modelos de IA.
  */
-export const llmConfig = {
-  provider: env.LLM_PROVIDER,
-  apiKey:
-    env.LLM_PROVIDER === 'gemini'
-      ? env.GEMINI_API_KEY
-      : env.LLM_PROVIDER === 'openai'
-        ? env.OPENAI_API_KEY
-        : env.CLAUDE_API_KEY,
-  model:
-    env.LLM_PROVIDER === 'gemini'
-      ? env.GEMINI_MODEL
-      : env.LLM_PROVIDER === 'openai'
-        ? env.OPENAI_MODEL
-        : env.CLAUDE_MODEL,
-};
+export type ModelProfile = 'fast' | 'powerful' | 'dev';
+
+/**
+ * Obtiene la configuración del LLM para un perfil de capacidad específico.
+ * Esta función centraliza la lógica de selección de modelos.
+ * @param profile El perfil de capacidad requerido ('fast' o 'powerful').
+ * @returns La configuración de proveedor, clave de API y modelo.
+ * @throws Si el perfil solicitado no está configurado.
+ */
+export function getLlmConfigForProfile(profile: ModelProfile): {
+  provider: 'gemini' | 'openai' | 'claude';
+  apiKey: string;
+  model: string;
+} {
+  let model: string;
+  // Por ahora, asumimos Gemini, pero esta lógica puede expandirse.
+  const provider = env.LLM_PROVIDER;
+  const apiKey = env.GEMINI_API_KEY;
+
+  if (!apiKey) {
+    throw new Error(`API key for provider '${provider}' is not configured.`);
+  }
+
+  switch (profile) {
+    case 'fast':
+      model = env.GEMINI_CHAT_MODEL;
+      break;
+    case 'powerful':
+      model = env.GEMINI_BLOG_MODEL;
+      break;
+    case 'dev':
+      model = env.GEMINI_DEV_MODEL;
+      break;
+    default:
+      // Esto previene errores en tiempo de compilación si se pasa un perfil inválido.
+      const exhaustiveCheck: never = profile; // eslint-disable-line @typescript-eslint/no-unused-vars
+      throw new Error(`Invalid model profile requested: ${exhaustiveCheck}`);
+  }
+
+  return { provider, apiKey, model };
+}
 
 /**
  * Configuración de feature flags
@@ -138,8 +171,10 @@ export const features = {
  */
 if (isDev) {
   console.log('🔧 Environment Configuration:');
-  console.log(`  • LLM Provider: ${llmConfig.provider}`);
-  console.log(`  • LLM Model: ${llmConfig.model}`);
+  console.log(`  • Primary LLM Provider: ${env.LLM_PROVIDER}`);
+  console.log(`  • Chat Model (fast): ${env.GEMINI_CHAT_MODEL}`);
+  console.log(`  • Blog Model (powerful): ${env.GEMINI_BLOG_MODEL}`);
+  console.log(`  • Dev Model (dev): ${env.GEMINI_DEV_MODEL}`);
   console.log(`  • Blog Storage: ${env.BLOG_STORAGE}`);
   console.log(`  • Deployment Target: ${env.DEPLOYMENT_TARGET}`);
   console.log(`  • Features:`);
