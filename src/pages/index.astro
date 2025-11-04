@@ -11,8 +11,10 @@
 
 import Hero from '@presentation/components/portfolio/Hero.svelte';
 import ProjectsGrid from '@presentation/components/portfolio/ProjectsGrid.svelte';
-import ChatIsland from '@presentation/islands/ChatIsland.astro'; // Importación de ChatIsland
+import ContactForm from '@presentation/components/contact/ContactForm.svelte';
+import ChatIsland from '@presentation/islands/ChatIsland.astro';
 import { projects } from '../data/projects';
+import { env } from '@infrastructure/config/env';
 
 // Configuración del Hero
 const heroData = {
@@ -21,6 +23,8 @@ const heroData = {
   description: 'Creando experiencias digitales excepcionales mediante código limpio, diseño intuitivo y atención meticulosa al detalle. Especializado en arquitecturas escalables y soluciones innovadoras con IA.',
   githubUrl: 'https://github.com/douglasrujana',
   linkedinUrl: 'https://linkedin.com/in/douglasrujana',
+  telegramUrl: env.TELEGRAM_BOT_USERNAME ? `https://t.me/${env.TELEGRAM_BOT_USERNAME}` : undefined,
+  whatsappUrl: env.WHATSAPP_NUMBER ? `https://wa.me/${env.WHATSAPP_NUMBER}?text=Hola%20Douglas,%20vi%20tu%20portfolio` : undefined,
   email: 'tu@email.com'
 };
 
@@ -75,6 +79,8 @@ const siteUrl = 'https://douglasrujana.com'; // Cambiar por tu dominio
       description={heroData.description}
       githubUrl={heroData.githubUrl}
       linkedinUrl={heroData.linkedinUrl}
+      telegramUrl={heroData.telegramUrl}
+      whatsappUrl={heroData.whatsappUrl}
       email={heroData.email}
     />
 
@@ -147,25 +153,7 @@ const siteUrl = 'https://douglasrujana.com'; // Cambiar por tu dominio
     </section>
 
     <!-- Contact Section -->
-    <section id="contact" class="section-jony contact-section">
-      <div class="container-jony">
-        <div class="contact-content">
-          <h2 class="section-title">Trabajemos Juntos</h2>
-          <p class="section-description" style="max-width: 600px; margin: 0 auto var(--space-xl);">
-            ¿Tienes un proyecto en mente? ¿Necesitas ayuda con arquitectura o desarrollo?
-            Siempre estoy abierto a discutir nuevas ideas y oportunidades.
-          </p>
-          <div class="contact-buttons">
-            <a href="mailto:tu@email.com" class="btn-jony btn-primary">
-              Enviar Email
-            </a>
-            <a href={heroData.linkedinUrl} target="_blank" rel="noopener noreferrer" class="btn-jony btn-secondary">
-              Conectar en LinkedIn
-            </a>
-          </div>
-        </div>
-      </div>
-    </section>
+    <ContactForm client:visible />
 
     <!-- Footer -->
     <footer class="footer">
@@ -184,6 +172,18 @@ const siteUrl = 'https://douglasrujana.com'; // Cambiar por tu dominio
             <a href={heroData.githubUrl} target="_blank" rel="noopener">GitHub</a>
             <span class="footer-separator">·</span>
             <a href={heroData.linkedinUrl} target="_blank" rel="noopener">LinkedIn</a>
+            {heroData.telegramUrl && (
+              <>
+                <span class="footer-separator">·</span>
+                <a href={heroData.telegramUrl} target="_blank" rel="noopener">Telegram</a>
+              </>
+            )}
+            {heroData.whatsappUrl && (
+              <>
+                <span class="footer-separator">·</span>
+                <a href={heroData.whatsappUrl} target="_blank" rel="noopener">WhatsApp</a>
+              </>
+            )}
             <span class="footer-separator">·</span>
             <a href="mailto:tu@email.com">Email</a>
           </div>

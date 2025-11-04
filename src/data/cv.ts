@@ -346,7 +346,11 @@ export const testimonials: Testimonial[] = [
  * Calcula años de experiencia total
  */
 export function getTotalYearsOfExperience(): number {
+  if (experiences.length === 0) return 0;
+  
   const firstJob = experiences[experiences.length - 1];
+  if (!firstJob) return 0;
+  
   const startDate = new Date(firstJob.startDate + '-01');
   const now = new Date();
   const years = (now.getTime() - startDate.getTime()) / (1000 * 60 * 60 * 24 * 365);

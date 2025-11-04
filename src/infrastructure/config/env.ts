@@ -30,10 +30,22 @@ const envSchema = z.object({
   BLOG_STORAGE: z.enum(['filesystem', 'notion', 's3']).default('filesystem'),
   BLOG_POSTS_DIR: z.string().default('./src/content/blog/posts'),
 
-  // WhatsApp Integration (Optional)
+  // Messaging Integration (Optional)
+  TELEGRAM_BOT_TOKEN: z.string().optional(),
+  TELEGRAM_BOT_USERNAME: z.string().optional(),
+  WHATSAPP_NUMBER: z.string().optional(),
+  
+  // Email & CRM (Optional)
+  RESEND_API_KEY: z.string().optional(),
+  HUBSPOT_API_KEY: z.string().optional(),
+  
+  // CV & Portfolio URLs (Optional)
+  CV_PDF_URL: z.string().url().optional(),
+  CALENDLY_URL: z.string().url().optional(),
+  
+  // WhatsApp Bot Integration (Optional - for Twilio)
   TWILIO_ACCOUNT_SID: z.string().optional(),
   TWILIO_AUTH_TOKEN: z.string().optional(),
-  WHATSAPP_NUMBER: z.string().optional(),
 
   // Social Media Integration (Optional)
   LINKEDIN_ACCESS_TOKEN: z.string().optional(),
@@ -52,6 +64,10 @@ const envSchema = z.object({
     .string()
     .transform((val) => val === 'true')
     .default('true'),
+  ENABLE_TELEGRAM: z
+    .string()
+    .transform((val) => val === 'true')
+    .default('false'),
   ENABLE_WHATSAPP: z
     .string()
     .transform((val) => val === 'true')
@@ -162,6 +178,7 @@ export function getLlmConfigForProfile(profile: ModelProfile): {
  */
 export const features = {
   chatbot: env.ENABLE_CHATBOT,
+  telegram: env.ENABLE_TELEGRAM && !!env.TELEGRAM_BOT_TOKEN,
   whatsapp: env.ENABLE_WHATSAPP && !!env.TWILIO_ACCOUNT_SID,
   crossPosting: env.ENABLE_CROSS_POSTING && !!env.LINKEDIN_ACCESS_TOKEN,
 };
@@ -179,6 +196,7 @@ if (isDev) {
   console.log(`  • Deployment Target: ${env.DEPLOYMENT_TARGET}`);
   console.log(`  • Features:`);
   console.log(`    - Chatbot: ${features.chatbot ? '✅' : '❌'}`);
+  console.log(`    - Telegram: ${features.telegram ? '✅' : '❌'}`);
   console.log(`    - WhatsApp: ${features.whatsapp ? '✅' : '❌'}`);
   console.log(`    - Cross-posting: ${features.crossPosting ? '✅' : '❌'}`);
 }
