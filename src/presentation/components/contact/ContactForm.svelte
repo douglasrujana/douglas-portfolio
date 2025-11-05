@@ -52,7 +52,7 @@
   }
 </script>
 
-<section class="contact-section">
+<section id="contact" class="contact-section">
   <div class="contact-container">
     <h2 class="contact-title">Trabajemos Juntos</h2>
     <p class="contact-description">

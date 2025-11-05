@@ -3,18 +3,24 @@
  * Homepage - Portfolio de Douglas Rujana
  * 
  * Esta es la landing page principal con:
+ * - Navegación
  * - Hero section
  * - Proyectos destacados
  * - Skills
  * - CTA de contacto
  */
 
+import Navigation from '@presentation/components/ui/Navigation.svelte';
 import Hero from '@presentation/components/portfolio/Hero.svelte';
 import ProjectsGrid from '@presentation/components/portfolio/ProjectsGrid.svelte';
 import ContactForm from '@presentation/components/contact/ContactForm.svelte';
 import ChatIsland from '@presentation/islands/ChatIsland.astro';
+import ScrollToTop from '@presentation/components/ui/ScrollToTop.simple.svelte';
 import { projects } from '../data/projects';
 import { env } from '@infrastructure/config/env';
+
+// Obtener la ruta actual para resaltar el ítem activo
+const currentPath = '/';
 
 // Configuración del Hero
 const heroData = {
@@ -71,6 +77,9 @@ const siteUrl = 'https://douglasrujana.com'; // Cambiar por tu dominio
   </head>
   
   <body>
+    <!-- Navigation -->
+    <Navigation client:load currentPath={currentPath} />
+    
     <!-- Hero Section -->
     <Hero 
       client:load
@@ -207,6 +216,9 @@ const siteUrl = 'https://douglasrujana.com'; // Cambiar por tu dominio
 
     <!-- Chat AI Island -->
     <ChatIsland />
+    
+    <!-- Scroll to Top Button -->
+    <ScrollToTop client:load />
   </body>
 </html>
 
