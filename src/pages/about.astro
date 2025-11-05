@@ -10,6 +10,8 @@
 import ExperienceTimeline from '@presentation/components/cv/ExperienceTimeline.svelte';
 import SkillsGrid from '@presentation/components/cv/SkillsGrid.svelte';
 import ChatIsland from '@presentation/islands/ChatIsland.astro';
+import Navigation from '@presentation/components/ui/Navigation.svelte';
+import ScrollToTop from '@presentation/components/ui/ScrollToTop.simple.svelte';
 import {
   personalInfo,
   experiences,
@@ -22,6 +24,9 @@ import {
   generatePersonSchema,
 } from '../data/cv';
 import { env } from '@infrastructure/config/env';
+
+// Set current path for active navigation highlighting
+const currentPath = '/about';
 
 const yearsOfExperience = getTotalYearsOfExperience();
 const personSchema = generatePersonSchema();
@@ -56,49 +61,35 @@ const description = `${personalInfo.title} con ${yearsOfExperience}+ años de ex
   </head>
   
   <body>
-    <!-- Header/Nav -->
-    <header class="page-header">
-      <div class="container-jony">
-        <nav class="page-nav">
-          <a href="/" class="nav-link">
-            <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
-              <path d="M3 9l9-7 9 7v11a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2z"></path>
-            </svg>
-            Inicio
-          </a>
-          <div class="nav-actions">
-            <a href="/blog" class="nav-link">Blog</a>
-            <a href={`mailto:${personalInfo.email}`} class="btn-jony btn-primary">
-              Contactar
-            </a>
-          </div>
-        </nav>
-      </div>
+    <!-- Navegación Principal -->
+    <header role="banner">
+      <Navigation client:load currentPath={currentPath} />
     </header>
-
-    <!-- Hero -->
-    <section class="about-hero">
-      <div class="container-jony">
-        <div class="hero-content">
-          <div class="hero-text">
-            <h1 class="hero-title">{personalInfo.name}</h1>
-            <p class="hero-subtitle">{personalInfo.title}</p>
-            <p class="hero-summary">{personalInfo.summary}</p>
-            
-            <div class="hero-stats">
-              <div class="stat-item">
-                <strong>{yearsOfExperience}+</strong>
-                <span>Años de experiencia</span>
+    
+    <main>
+      <!-- Sección Hero -->
+      <section class="about-hero" aria-labelledby="hero-heading">
+        <div class="container-jony">
+          <div class="hero-content">
+            <div class="hero-text">
+              <h1 id="hero-heading" class="hero-title">{personalInfo.name}</h1>
+              <p class="hero-subtitle">{personalInfo.title}</p>
+              <p class="hero-summary">{personalInfo.summary}</p>
+              
+              <div class="hero-stats" role="list" aria-label="Estadísticas profesionales">
+                <div class="stat-item" role="listitem">
+                  <strong>{yearsOfExperience}+</strong>
+                  <span>Años de experiencia</span>
+                </div>
+                <div class="stat-item" role="listitem">
+                  <strong>{experiences.length}</strong>
+                  <span>Posiciones</span>
+                </div>
+                <div class="stat-item" role="listitem">
+                  <strong>{certifications.length}</strong>
+                  <span>Certificaciones</span>
+                </div>
               </div>
-              <div class="stat-item">
-                <strong>{experiences.length}</strong>
-                <span>Posiciones</span>
-              </div>
-              <div class="stat-item">
-                <strong>{certifications.length}</strong>
-                <span>Certificaciones</span>
-              </div>
-            </div>
 
             <div class="hero-actions">
               <a href="#experience" class="btn-jony btn-primary">
@@ -116,10 +107,23 @@ const description = `${personalInfo.title} con ${yearsOfExperience}+ años de ex
           </div>
 
           <div class="hero-image">
-            <img src={personalInfo.avatar} alt={personalInfo.name} />
-            <div class="hero-contact">
-              <a href={personalInfo.linkedin} target="_blank" rel="noopener" class="contact-link">
-                <svg width="20" height="20" viewBox="0 0 24 24" fill="currentColor">
+            <img 
+              src={personalInfo.avatar} 
+              alt={`Fotografía de ${personalInfo.name}`} 
+              width="200" 
+              height="200"
+              loading="lazy"
+              decoding="async"
+            />
+            <div class="hero-contact" role="complementary" aria-label="Redes sociales">
+              <a 
+                href={personalInfo.linkedin} 
+                target="_blank" 
+                rel="noopener noreferrer" 
+                class="contact-link"
+                aria-label="Perfil de LinkedIn"
+              >
+                <svg width="20" height="20" viewBox="0 0 24 24" fill="currentColor" aria-hidden="true">
                   <path d="M16 8a6 6 0 016 6v7h-4v-7a2 2 0 00-2-2 2 2 0 00-2 2v7h-4v-7a6 6 0 016-6zM2 9h4v12H2z"></path>
                   <circle cx="4" cy="4" r="2"></circle>
                 </svg>
@@ -153,18 +157,24 @@ const description = `${personalInfo.title} con ${yearsOfExperience}+ años de ex
       </div>
     </section>
 
-    <!-- Experience -->
-    <section id="experience" class="section-jony">
+    </section>
+    
+    <!-- Experiencia Laboral -->
+    <section id="experience" class="section-jony" aria-labelledby="experience-heading">
+      <div class="container-jony">
+        <h2 id="experience-heading" class="section-title">Experiencia Laboral</h2>
       <div class="container-jony">
         <h2 class="section-title">Experiencia Laboral</h2>
         <ExperienceTimeline client:visible experiences={experiences} />
       </div>
     </section>
 
-    <!-- Skills -->
-    <section id="skills" class="section-jony" style="background: var(--color-gray-50);">
+    </section>
+
+    <!-- Habilidades Técnicas -->
+    <section id="skills" class="section-jony" style="background: var(--color-gray-50);" aria-labelledby="skills-heading">
       <div class="container-jony">
-        <h2 class="section-title">Habilidades Técnicas</h2>
+        <h2 id="skills-heading" class="section-title">Habilidades Técnicas</h2>
         <SkillsGrid client:visible skills={skills} />
       </div>
     </section>
@@ -260,10 +270,10 @@ const description = `${personalInfo.title} con ${yearsOfExperience}+ años de ex
       </div>
     </section>
 
-    <!-- Download CV Section -->
-    <section id="download-cv" class="section-jony" style="background: var(--color-gray-50); text-align: center;">
+    <!-- Sección de Contacto -->
+    <section id="download-cv" class="section-jony" style="background: var(--color-gray-50); text-align: center;" aria-labelledby="contact-heading">
       <div class="container-jony">
-        <h2 class="section-title">¿Interesado en trabajar conmigo?</h2>
+        <h2 id="contact-heading" class="section-title">¿Interesado en trabajar conmigo?</h2>
         <p style="max-width: 600px; margin: 0 auto var(--space-xl); color: var(--color-gray-600);">
           Descarga mi CV en formato PDF o contáctame directamente. Estoy disponible para
           proyectos freelance y posiciones full-time remotas.
@@ -284,28 +294,24 @@ const description = `${personalInfo.title} con ${yearsOfExperience}+ años de ex
       </div>
     </section>
 
-    <!-- Footer -->
-    <footer class="footer">
+    </section>
+    
+    <!-- Pie de página -->
+    <footer class="footer" role="contentinfo">
       <div class="container-jony">
         <p style="text-align: center; color: var(--color-gray-500); font-size: 0.875rem;">
-          © 2025 {personalInfo.name}
+          &copy; 2025 {personalInfo.name}. Todos los derechos reservados.
         </p>
       </div>
     </footer>
 
-    <!-- Chat Widget -->
-    <ChatIsland />
-
-    <!-- AOS Animation Library -->
-    <script src="https://cdnjs.cloudflare.com/ajax/libs/aos/2.3.4/aos.js"></script>
-    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/aos/2.3.4/aos.css" />
-    <script>
-      AOS.init({
-        duration: 800,
-        easing: 'ease-out',
-        once: true,
-      });
-    </script>
+    </main>
+    
+    <!-- Chat de asistencia -->
+    <ChatIsland aria-label="Chat de asistencia" />
+    
+    <!-- Botón de Scroll to Top -->
+    <ScrollToTop client:load />
   </body>
 </html>
 
