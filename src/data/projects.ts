@@ -106,7 +106,10 @@ export const projects: Project[] = [
  * Obtiene proyectos destacados
  */
 export function getFeaturedProjects(): Project[] {
-  return projects.filter((p) => p.featured === true);
+  // Asegurarse de que siempre devolvemos un array
+  const featured = projects.filter((p) => p.featured === true);
+  console.log('Proyectos destacados encontrados:', featured.length);
+  return featured.length > 0 ? featured : projects.slice(0, 4); // Si no hay destacados, devolver los primeros 4
 }
 
 /**

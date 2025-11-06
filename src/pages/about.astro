@@ -28,6 +28,13 @@ import { env } from '@infrastructure/config/env';
 // Set current path for active navigation highlighting
 const currentPath = '/about';
 
+// Función para obtener el color según el nivel de habilidad
+const getLevelColor = (level: number): string => {
+  if (level >= 4) return '#10b981'; // Verde para avanzado
+  if (level >= 3) return '#3b82f6'; // Azul para intermedio
+  return '#6b7280'; // Gris para básico
+};
+
 const yearsOfExperience = getTotalYearsOfExperience();
 const personSchema = generatePersonSchema();
 
@@ -174,8 +181,56 @@ const description = `${personalInfo.title} con ${yearsOfExperience}+ años de ex
     <!-- Habilidades Técnicas -->
     <section id="skills" class="section-jony" style="background: var(--color-gray-50);" aria-labelledby="skills-heading">
       <div class="container-jony">
-        <h2 id="skills-heading" class="section-title">Habilidades Técnicas</h2>
-        <SkillsGrid client:visible skills={skills} />
+        <div class="section-header">
+          <h2 id="skills-heading" class="section-title">Habilidades Técnicas</h2>
+          <p class="section-description">
+            Tecnologías y herramientas que domino, con mi nivel de competencia y años de experiencia en cada una.
+          </p>
+        </div>
+        
+        <div class="skills-container">
+          {skills.map((category, catIndex) => (
+            <div class="skill-category" data-aos="fade-up" data-aos-delay={catIndex * 50}>
+              <div class="category-header">
+                <h3 class="category-title">{category.category}</h3>
+                <span class="category-count">{category.skills.length} habilidades</span>
+              </div>
+              
+              <div class="skills-list">
+                {category.skills.map((skill, skillIndex) => {
+                  // Calcular el porcentaje basado en el nivel (1-5)
+                  const percentage = (skill.level / 5) * 100;
+                  const years = skill.yearsOfExperience || 0;
+                  
+                  return (
+                    <div class="skill-item">
+                      <div class="skill-info">
+                        <span class="skill-name">{skill.name}</span>
+                        <span class="skill-level">
+                          {skill.level >= 4 ? 'Avanzado' : 
+                           skill.level >= 3 ? 'Intermedio' : 'Básico'}
+                          {years > 0 && ` • ${years}+ año${years !== 1 ? 's' : ''}`}
+                        </span>
+                      </div>
+                      <div class="skill-bar">
+                        <div 
+                          class="skill-progress" 
+                          style={{
+                            width: `${percentage}%`,
+                            background: getLevelColor(skill.level)
+                          }}
+                          aria-valuenow={skill.level}
+                          aria-valuemin="1"
+                          aria-valuemax="5"
+                        ></div>
+                      </div>
+                    </div>
+                  );
+                })}
+              </div>
+            </div>
+          ))}
+        </div>
       </div>
     </section>
 
@@ -320,6 +375,127 @@ const description = `${personalInfo.title} con ${yearsOfExperience}+ años de ex
 </style>
 
 <style>
+  /* Section Header */
+  .section-header {
+    text-align: center;
+    margin-bottom: var(--space-xl);
+  }
+
+  .section-title {
+    font-size: clamp(2rem, 5vw, 2.5rem);
+    font-weight: 300;
+    margin-bottom: var(--space-md);
+    color: var(--color-gray-900);
+  }
+
+  .section-description {
+    font-size: 1.125rem;
+    color: var(--color-gray-600);
+    line-height: 1.7;
+    max-width: 700px;
+    margin: 0 auto;
+  }
+
+  /* Skills Section */
+  .skills-container {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+    gap: var(--space-xl);
+    margin-top: var(--space-xl);
+  }
+
+  .skill-category {
+    background: var(--color-white);
+    border-radius: var(--radius-lg);
+    padding: var(--space-lg);
+    border: 1px solid var(--color-gray-200);
+    box-shadow: 0 2px 8px rgba(0, 0, 0, 0.05);
+    transition: all 0.3s ease;
+  }
+
+  .skill-category:hover {
+    transform: translateY(-4px);
+    box-shadow: 0 10px 25px rgba(0, 0, 0, 0.1);
+  }
+
+  .category-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-bottom: var(--space-md);
+    padding-bottom: var(--space-sm);
+    border-bottom: 2px solid var(--color-gray-100);
+  }
+
+  .category-title {
+    font-size: 1.25rem;
+    font-weight: 600;
+    color: var(--color-gray-900);
+    margin: 0;
+  }
+
+  .category-count {
+    font-size: 0.85rem;
+    background: var(--color-gray-100);
+    color: var(--color-gray-600);
+    padding: 0.2rem 0.6rem;
+    border-radius: 20px;
+    font-weight: 500;
+  }
+
+  .skills-list {
+    display: flex;
+    flex-direction: column;
+    gap: var(--space-md);
+  }
+
+  .skill-item {
+    width: 100%;
+  }
+
+  .skill-info {
+    display: flex;
+    justify-content: space-between;
+    margin-bottom: 0.3rem;
+  }
+
+  .skill-name {
+    font-weight: 500;
+    color: var(--color-gray-800);
+    font-size: 0.95rem;
+  }
+
+  .skill-level {
+    font-size: 0.8rem;
+    color: var(--color-gray-500);
+    font-weight: 500;
+  }
+
+  .skill-bar {
+    width: 100%;
+    height: 8px;
+    background: var(--color-gray-100);
+    border-radius: 10px;
+    overflow: hidden;
+  }
+
+  .skill-progress {
+    height: 100%;
+    border-radius: 10px;
+    transition: width 1s ease-in-out;
+  }
+
+  /* Responsive */
+  @media (max-width: 768px) {
+    .skills-container {
+      grid-template-columns: 1fr;
+    }
+    
+    .skill-category {
+      padding: var(--space-md);
+    }
+  }
+
   /* Header */
   .page-header {
     padding: var(--space-lg) 0;

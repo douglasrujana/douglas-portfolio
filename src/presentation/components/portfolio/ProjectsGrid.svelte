@@ -1,18 +1,8 @@
 <script lang="ts">
-  /**
-   * ProjectsGrid Component
-   * Grid de proyectos con filtering interactivo
-   * 
-   * Features:
-   * - Filter por tecnología
-   * - Animaciones de entrada
-   * - Responsive grid
-   * - Estado "Todos"
-   */
-
   import ProjectCard from './ProjectCard.svelte';
   import TechBadge from '../ui/TechBadge.svelte';
 
+  // Definir la interfaz del proyecto
   interface Project {
     id: string | number;
     title: string;
@@ -21,80 +11,73 @@
     tags: string[];
     demoUrl?: string;
     githubUrl?: string;
+    featured?: boolean;
   }
 
-  interface Props {
-    projects: Project[];
-    class?: string;
-  }
-
-  let { projects, class: customClass = '' }: Props = $props();
+  // Props del componente
+  export let projects: Project[] = [];
+  export let className: string = '';
 
   // Estado del filtro activo
-  let activeFilter = $state<string>('all');
-
+  let activeFilter: string = 'all';
+  
   // Extraer todas las tecnologías únicas
-  const allTags = $derived(() => {
-    const tags = new Set<string>();
-    projects.forEach(project => {
-      project.tags.forEach(tag => tags.add(tag));
-    });
-    return Array.from(tags).sort();
-  });
-
+  $: allTags = Array.from(
+    new Set(projects.flatMap(project => project.tags || []))
+  ).sort();
+  
   // Proyectos filtrados
-  const filteredProjects = $derived(() => {
-    if (activeFilter === 'all') {
-      return projects;
-    }
-    return projects.filter(project => 
-      project.tags.includes(activeFilter)
-    );
-  });
+  $: filteredProjects = activeFilter === 'all'
+    ? projects
+    : projects.filter(project => 
+        project.tags?.some(tag => 
+          String(tag).toLowerCase() === activeFilter.toLowerCase()
+        )
+      );
 
-    // Handler del filtro
-  function handleFilterChange(filter: string) {
+  // Manejar el cambio de filtro
+  function handleFilterClick(filter: string) {
     activeFilter = filter;
   }
 </script>
 
-<div class="projects-section {customClass}">
+<div class="projects-section {className}">
   <!-- Filter Pills -->
   <div class="filter-container fade-in-jony" style="animation-delay: 0.1s;">
     <TechBadge 
       label="Todos"
       active={activeFilter === 'all'}
       clickable={true}
-      onclick={() => handleFilterChange('all')}
+      onclick={() => handleFilterClick('all')}
     />
-    {#each allTags() as tag}
+    {#each allTags as tag (tag)}
       <TechBadge 
         label={tag}
         active={activeFilter === tag}
         clickable={true}
-        onclick={() => handleFilterChange(tag)}
+        onclick={() => handleFilterClick(tag)}
       />
     {/each}
   </div>
 
   <!-- Projects Count -->
   <div class="projects-count fade-in-jony" style="animation-delay: 0.2s;">
-    {filteredProjects().length} 
-    {filteredProjects().length === 1 ? 'proyecto' : 'proyectos'}
+    {filteredProjects.length} 
+    {filteredProjects.length === 1 ? 'proyecto' : 'proyectos'}
     {#if activeFilter !== 'all'}
       <span class="filter-indicator">con {activeFilter}</span>
     {/if}
   </div>
 
   <!-- Projects Grid -->
-  {#if filteredProjects().length > 0}
+  {#if filteredProjects && filteredProjects.length > 0}
     <div class="projects-grid">
-      {#each filteredProjects() as project, index}
+      {#each filteredProjects as project, index (project.id)}
         <div 
           class="project-item fade-in-jony"
           style="animation-delay: {0.3 + (index * 0.1)}s;"
         >
-          <ProjectCard {project} />
+          <ProjectCard project={project} />
         </div>
       {/each}
     </div>
@@ -143,11 +126,26 @@
     font-weight: 400;
   }
 
-  /* Grid */
+  /* Projects Grid */
   .projects-grid {
     display: grid;
-    grid-template-columns: repeat(auto-fill, minmax(320px, 1fr));
-    gap: var(--space-lg);
+    grid-template-columns: repeat(auto-fill, minmax(300px, 1fr));
+    gap: var(--space-xl);
+    margin-top: var(--space-xl);
+    align-items: stretch;
+  }
+  
+  .project-item {
+    display: flex;
+    flex-direction: column;
+    height: 100%;
+  }
+  
+  /* Asegurar que todas las tarjetas tengan la misma altura */
+  .project-item :global(.card-jony) {
+    height: 100%;
+    display: flex;
+    flex-direction: column;
   }
 
   /* Empty state */

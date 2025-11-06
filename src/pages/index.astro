@@ -16,7 +16,8 @@ import ProjectsGrid from '@presentation/components/portfolio/ProjectsGrid.svelte
 import ContactForm from '@presentation/components/contact/ContactForm.svelte';
 import ChatIsland from '@presentation/islands/ChatIsland.astro';
 import ScrollToTop from '@presentation/components/ui/ScrollToTop.simple.svelte';
-import { projects } from '../data/projects';
+import { getFeaturedProjects } from '../data/projects';
+import { skills } from '../data/cv';
 import { env } from '@infrastructure/config/env';
 
 // Obtener la ruta actual para resaltar el ítem activo
@@ -104,62 +105,10 @@ const siteUrl = 'https://douglasrujana.com'; // Cambiar por tu dominio
           </p>
         </div>
         
-        <ProjectsGrid client:load projects={projects} />
+        <ProjectsGrid client:load projects={getFeaturedProjects()} />
       </div>
     </section>
 
-    <!-- Technologies Section -->
-    <section class="section-jony technologies-section">
-      <div class="container-jony">
-        <div class="section-header">
-          <h2 class="section-title">Stack Tecnológico</h2>
-          <p class="section-description">
-            Tecnologías y herramientas que domino para construir soluciones escalables y mantenibles.
-          </p>
-        </div>
-        
-        <div class="tech-grid">
-          <div class="tech-category">
-            <h3 class="tech-category-title">Frontend</h3>
-            <div class="tech-items">
-              <span class="tech-item">Astro</span>
-              <span class="tech-item">Svelte</span>
-              <span class="tech-item">TypeScript</span>
-              <span class="tech-item">Tailwind CSS</span>
-            </div>
-          </div>
-
-          <div class="tech-category">
-            <h3 class="tech-category-title">Backend</h3>
-            <div class="tech-items">
-              <span class="tech-item">Node.js</span>
-              <span class="tech-item">Express</span>
-              <span class="tech-item">PHP</span>
-              <span class="tech-item">Laravel</span>
-            </div>
-          </div>
-
-          <div class="tech-category">
-            <h3 class="tech-category-title">Database</h3>
-            <div class="tech-items">
-              <span class="tech-item">MySQL</span>
-              <span class="tech-item">MongoDB</span>
-              <span class="tech-item">PostgreSQL</span>
-            </div>
-          </div>
-
-          <div class="tech-category">
-            <h3 class="tech-category-title">AI & DevOps</h3>
-            <div class="tech-items">
-              <span class="tech-item">Gemini AI</span>
-              <span class="tech-item">Docker</span>
-              <span class="tech-item">GitHub Actions</span>
-              <span class="tech-item">Vercel</span>
-            </div>
-          </div>
-        </div>
-      </div>
-    </section>
 
     <!-- Contact Section -->
     <ContactForm client:visible />
@@ -258,40 +207,79 @@ const siteUrl = 'https://douglasrujana.com'; // Cambiar por tu dominio
   .tech-grid {
     display: grid;
     grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
-    gap: var(--space-xl);
+    gap: var(--space-lg);
+    margin-top: var(--space-xl);
   }
 
   .tech-category {
-    text-align: center;
+    background: var(--color-white);
+    border: 1px solid var(--color-gray-200);
+    border-radius: var(--radius-lg);
+    padding: var(--space-lg);
+    transition: all var(--transition-base);
+    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.03);
+  }
+
+  .tech-category:hover {
+    transform: translateY(-4px);
+    box-shadow: var(--shadow-md);
+    border-color: var(--color-accent);
   }
 
   .tech-category-title {
-    font-size: 1.125rem;
-    font-weight: 400;
+    font-size: 1.1rem;
+    font-weight: 600;
     color: var(--color-gray-900);
     margin-bottom: var(--space-md);
+    padding-bottom: var(--space-xs);
+    border-bottom: 2px solid var(--color-accent);
+    display: inline-block;
   }
 
   .tech-items {
     display: flex;
-    flex-direction: column;
+    flex-wrap: wrap;
     gap: var(--space-sm);
+    justify-content: center;
   }
 
   .tech-item {
-    padding: var(--space-sm) var(--space-md);
-    background: var(--color-white);
+    background: var(--color-gray-50);
+    padding: var(--space-xs) var(--space-sm);
     border-radius: var(--radius-md);
-    font-size: 0.9375rem;
-    font-weight: 300;
-    color: var(--color-gray-700);
+    font-size: 0.9rem;
+    color: var(--color-gray-800);
+    display: inline-flex;
+    align-items: center;
+    gap: var(--space-xs);
     transition: all var(--transition-base);
+    border: 1px solid var(--color-gray-200);
   }
 
   .tech-item:hover {
-    background: var(--color-gray-900);
-    color: var(--color-white);
-    transform: translateX(4px);
+    background: var(--color-accent);
+    color: white;
+    transform: translateY(-1px);
+    border-color: var(--color-accent);
+  }
+
+  .tech-exp {
+    font-size: 0.7rem;
+    opacity: 0.8;
+    background: rgba(255, 255, 255, 0.2);
+    padding: 0.1rem 0.3rem;
+    border-radius: 4px;
+    margin-left: 4px;
+  }
+
+  @media (max-width: 768px) {
+    .tech-grid {
+      grid-template-columns: 1fr;
+    }
+    
+    .tech-items {
+      justify-content: flex-start;
+    }
   }
 
   /* Contact Section */
