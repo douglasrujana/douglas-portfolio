@@ -9,6 +9,8 @@ import TechBadge from '@presentation/components/ui/TechBadge.svelte';
 import Navigation from '@presentation/components/ui/Navigation.svelte';
 import ScrollToTop from '@presentation/components/ui/ScrollToTop.simple.svelte';
 import CodeBackground from '@presentation/components/ui/CodeBackground.svelte';
+import Footer from '@presentation/components/ui/Footer.svelte';
+import { env } from '@infrastructure/config/env';
 import { getPublishedPosts, getAllTags, getAllCategories } from '../../lib/blog-utils';
 
 // Configuración de navegación
@@ -151,13 +153,17 @@ const description = 'Artículos sobre desarrollo web, arquitectura de software, 
     </main>
     
     <!-- Pie de página -->
-    <footer class="footer" role="contentinfo">
-      <div class="container-jony">
-        <p style="text-align: center; color: var(--color-gray-500); font-size: 0.875rem;">
-          &copy; {new Date().getFullYear()} Douglas Rujana. Todos los derechos reservados.
-        </p>
-      </div>
-    </footer>
+    <Footer 
+      currentYear={new Date().getFullYear()}
+      showTechCredits={true}
+      socialLinks={{
+        github: 'https://github.com/douglasrujana',
+        linkedin: 'https://linkedin.com/in/douglasrujana',
+        telegram: env.TELEGRAM_BOT_USERNAME ? `https://t.me/${env.TELEGRAM_BOT_USERNAME}` : null,
+        whatsapp: env.WHATSAPP_NUMBER ? `https://wa.me/${env.WHATSAPP_NUMBER}?text=Hola%20Douglas,%20vi%20tu%20blog` : null,
+        email: 'tu@email.com'
+      }}
+    />
     
     <!-- Botón de Scroll to Top -->
     <ScrollToTop client:load />

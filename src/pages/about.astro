@@ -12,6 +12,7 @@ import SkillsGrid from '@presentation/components/cv/SkillsGrid.svelte';
 import ChatIsland from '@presentation/islands/ChatIsland.astro';
 import Navigation from '@presentation/components/ui/Navigation.svelte';
 import ScrollToTop from '@presentation/components/ui/ScrollToTop.simple.svelte';
+import Footer from '@presentation/components/ui/Footer.svelte';
 import {
   personalInfo,
   experiences,
@@ -352,13 +353,17 @@ const description = `${personalInfo.title} con ${yearsOfExperience}+ años de ex
     </section>
     
     <!-- Pie de página -->
-    <footer class="footer" role="contentinfo">
-      <div class="container-jony">
-        <p style="text-align: center; color: var(--color-gray-500); font-size: 0.875rem;">
-          &copy; 2025 {personalInfo.name}. Todos los derechos reservados.
-        </p>
-      </div>
-    </footer>
+    <Footer 
+      currentYear={2025}
+      showTechCredits={true}
+      socialLinks={{
+        github: personalInfo.github,
+        linkedin: personalInfo.linkedin,
+        telegram: telegramUrl,
+        whatsapp: whatsappUrl,
+        email: personalInfo.email
+      }}
+    />
 
     </main>
     

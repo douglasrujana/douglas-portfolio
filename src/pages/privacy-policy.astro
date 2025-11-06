@@ -1,0 +1,228 @@
+---
+import Navigation from '@presentation/components/ui/Navigation.svelte';
+import Footer from '@presentation/components/ui/Footer.svelte';
+import { env } from '@infrastructure/config/env';
+
+const siteTitle = 'Política de Privacidad | Douglas Rujana';
+const siteDescription = 'Política de privacidad y protección de datos de Douglas Rujana. Conoce cómo manejamos tu información personal.';
+const siteUrl = 'https://douglasrujana.com/privacy-policy';
+
+// URLs de contacto
+const telegramUrl = env.TELEGRAM_BOT_USERNAME ? `https://t.me/${env.TELEGRAM_BOT_USERNAME}` : null;
+const whatsappUrl = env.WHATSAPP_NUMBER ? `https://wa.me/${env.WHATSAPP_NUMBER}?text=Hola%20Douglas,%20tengo%20una%20consulta%20sobre%20privacidad` : null;
+---
+
+<!DOCTYPE html>
+<html lang="es" class="scroll-smooth">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>{siteTitle}</title>
+    <meta name="description" content={siteDescription} />
+    
+    <!-- Open Graph / Facebook -->
+    <meta property="og:type" content="website" />
+    <meta property="og:url" content={siteUrl} />
+    <meta property="og:title" content={siteTitle} />
+    <meta property="og:description" content={siteDescription} />
+    <meta property="og:image" content="/images/og-image.jpg" />
+
+    <!-- Twitter -->
+    <meta property="twitter:card" content="summary_large_image" />
+    <meta property="twitter:url" content={siteUrl} />
+    <meta property="twitter:title" content={siteTitle} />
+    <meta property="twitter:description" content={siteDescription} />
+    <meta property="twitter:image" content="/images/og-image.jpg" />
+    
+    <!-- Estilos globales y de Jony Ive -->
+    <link rel="stylesheet" href="/styles/global.css" />
+    <style>
+      @import '../styles/jony-ive.css';
+    </style>
+  </head>
+  <body class="min-h-screen flex flex-col bg-white dark:bg-gray-900 text-gray-900 dark:text-gray-100 transition-colors duration-200">
+    <!-- Navegación -->
+    <div class="px-4 md:px-8">
+      <Navigation client:load />
+    </div>
+    
+    <!-- Contenido principal -->
+    <main class="flex-grow container-jony py-16 px-4 md:px-8">
+      <div class="max-w-4xl">
+        <header class="mb-12">
+          <h1 class="text-4xl font-bold text-gray-900 dark:text-white mb-4">Política de Privacidad</h1>
+          <p class="text-lg text-gray-600 dark:text-gray-300">Última actualización: 5 de Noviembre de 2025</p>
+        </header>
+
+        <div class="prose dark:prose-invert max-w-none">
+          <section class="mb-12">
+            <h2 class="text-2xl font-semibold mb-4">1. Introducción</h2>
+            <p class="mb-4">
+              En Douglas Rujana, nos tomamos muy en serio tu privacidad. Esta política explica cómo recopilamos, usamos y protegemos tu información personal cuando visitas nuestro sitio web.
+            </p>
+          </section>
+        </p>
+      </section>
+
+      <section class="mb-12">
+        <h2 class="text-2xl font-semibold mb-4">2. Información que Recopilamos</h2>
+        <ul class="list-disc pl-6 mb-4 space-y-2">
+          <li><strong>Información de contacto:</strong> Nombre, correo electrónico cuando nos contactas.</li>
+          <li><strong>Datos de uso:</strong> Cómo interactúas con nuestro sitio web.</li>
+          <li><strong>Cookies y tecnologías similares:</strong> Para mejorar tu experiencia.</li>
+        </ul>
+      </section>
+
+      <section class="mb-12">
+        <h2 class="text-2xl font-semibold mb-4">3. Cómo Usamos Tu Información</h2>
+        <p class="mb-4">Utilizamos tu información para:</p>
+        <ul class="list-disc pl-6 mb-4 space-y-2">
+          <li>Proporcionar y mantener nuestro servicio</li>
+          <li>Notificarte sobre cambios en nuestro servicio</li>
+          <li>Permitirte participar en funciones interactivas</li>
+          <li>Proporcionar análisis o información valiosa</li>
+          <li>Monitorear el uso de nuestro servicio</li>
+          <li>Detectar, prevenir y abordar problemas técnicos</li>
+        </ul>
+      </section>
+
+      <section class="mb-12">
+        <h2 class="text-2xl font-semibold mb-4">4. Cookies y Tecnologías de Seguimiento</h2>
+        <p class="mb-4">
+          Utilizamos cookies y tecnologías de seguimiento similares para rastrear la actividad en nuestro servicio y mantener cierta información.
+        </p>
+      </section>
+
+      <section class="mb-12">
+        <h2 class="text-2xl font-semibold mb-4">5. Seguridad de los Datos</h2>
+        <p class="mb-4">
+          La seguridad de tus datos es importante para nosotros, pero recuerda que ningún método de transmisión por Internet o almacenamiento electrónico es 100% seguro.
+        </p>
+      </section>
+
+      <section class="mb-12">
+        <h2 class="text-2xl font-semibold mb-4">6. Tus Derechos de Protección de Datos</h2>
+        <p class="mb-4">Tienes derecho a:</p>
+        <ul class="list-disc pl-6 mb-4 space-y-2">
+          <li>Acceder a tus datos personales</li>
+          <li>Solicitar corrección de datos inexactos</li>
+          <li>Solicitar eliminación de datos</li>
+          <li>Oponerte al procesamiento de datos</li>
+          <li>Solicitar restricción del procesamiento</li>
+          <li>Solicitar la portabilidad de datos</li>
+        </ul>
+      </section>
+
+      <section class="mb-12">
+        <h2 class="text-2xl font-semibold mb-4">7. Cambios a Esta Política de Privacidad</h2>
+        <p class="mb-4">
+          Podemos actualizar nuestra Política de Privacidad periódicamente. Te notificaremos de cualquier cambio publicando la nueva Política de Privacidad en esta página.
+        </p>
+      </section>
+
+      <section class="mb-12">
+        <h2 class="text-2xl font-semibold mb-4">8. Contáctanos</h2>
+        <p class="mb-4">
+          Si tienes alguna pregunta sobre esta Política de Privacidad, por favor contáctanos:
+        </p>
+        <ul class="list-disc pl-6 space-y-2">
+          <li>Por correo electrónico: [tu-email@ejemplo.com]</li>
+          <li>Visitando esta página en nuestro sitio web: [URL de contacto]</li>
+        </ul>
+      </section>
+      </div>
+    </main>
+
+    <!-- Footer -->
+    <footer class="footer">
+      <Footer 
+        currentYear={2025}
+        showTechCredits={true}
+        socialLinks={{
+          github: 'https://github.com/douglasrujana',
+          linkedin: 'https://linkedin.com/in/douglasrujana',
+          telegram: telegramUrl,
+          whatsapp: whatsappUrl,
+          email: 'contacto@douglasrujana.com'
+        }}
+      />
+    </footer>
+</body>
+</html>
+
+<style>
+  /* Estilos específicos para la página de privacidad */
+  .prose {
+    color: var(--color-gray-700);
+    line-height: 1.75;
+    max-width: 65ch;
+    margin: 0 auto;
+  }
+  
+  .dark .prose {
+    color: var(--color-gray-200);
+  }
+  
+  .prose h2 {
+    color: var(--color-gray-900);
+    font-size: 1.5rem;
+    font-weight: 600;
+    margin-top: 2.5rem;
+    margin-bottom: 1.25rem;
+    padding-bottom: 0.5rem;
+    border-bottom: 1px solid var(--color-gray-200);
+  }
+  
+  .dark .prose h2 {
+    color: var(--color-white);
+    border-color: var(--color-gray-700);
+  }
+  
+  .prose p {
+    margin-bottom: 1.25rem;
+    line-height: 1.7;
+  }
+  
+  .prose ul, .prose ol {
+    list-style-type: disc;
+    padding-left: 1.5rem;
+    margin-bottom: 1.5rem;
+  }
+  
+  .prose li {
+    margin-bottom: 0.5rem;
+    line-height: 1.6;
+  }
+  
+  .prose a {
+    color: var(--color-primary);
+    text-decoration: none;
+    font-weight: 500;
+    transition: color 0.2s ease;
+  }
+  
+  .prose a:hover {
+    color: var(--color-primary-dark);
+    text-decoration: underline;
+  }
+  
+  .dark .prose a {
+    color: var(--color-primary-light);
+  }
+  
+  .dark .prose a:hover {
+    color: var(--color-primary);
+  }
+  
+  /* Mejoras de espaciado para móviles */
+  @media (max-width: 640px) {
+    .prose {
+      padding: 0 1rem;
+    }
+    
+    .prose h2 {
+      font-size: 1.35rem;
+      margin-top: 2rem;
+    }
+  }
+</style>
