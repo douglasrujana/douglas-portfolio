@@ -13,12 +13,12 @@
 import Navigation from '@presentation/components/ui/Navigation.svelte';
 import Hero from '@presentation/components/portfolio/Hero.svelte';
 import ProjectsGrid from '@presentation/components/portfolio/ProjectsGrid.svelte';
-import ContactForm from '@presentation/components/contact/ContactForm.svelte';
 import ChatIsland from '@presentation/islands/ChatIsland.astro';
 import ScrollToTop from '@presentation/components/ui/ScrollToTop.simple.svelte';
 import { getFeaturedProjects } from '../data/projects';
 import { skills } from '../data/cv';
 import { env } from '@infrastructure/config/env';
+import Footer from '@presentation/components/ui/Footer.svelte';
 
 // Obtener la ruta actual para resaltar el ítem activo
 const currentPath = '/';
@@ -110,44 +110,18 @@ const siteUrl = 'https://douglasrujana.com'; // Cambiar por tu dominio
     </section>
 
 
-    <!-- Contact Section -->
-    <ContactForm client:visible />
-
     <!-- Footer -->
-    <footer class="footer">
-      <div class="container-jony">
-        <div class="footer-content">
-          <p class="footer-text">
-            © 2025 Douglas Rujana. Diseñado con atención al detalle.
-          </p>
-          <p class="footer-tech">
-            Construido con 
-            <a href="https://astro.build" target="_blank" rel="noopener">Astro</a>,
-            <a href="https://svelte.dev" target="_blank" rel="noopener">Svelte</a>
-            y arquitectura hexagonal.
-          </p>
-          <div class="footer-links">
-            <a href={heroData.githubUrl} target="_blank" rel="noopener">GitHub</a>
-            <span class="footer-separator">·</span>
-            <a href={heroData.linkedinUrl} target="_blank" rel="noopener">LinkedIn</a>
-            {heroData.telegramUrl && (
-              <>
-                <span class="footer-separator">·</span>
-                <a href={heroData.telegramUrl} target="_blank" rel="noopener">Telegram</a>
-              </>
-            )}
-            {heroData.whatsappUrl && (
-              <>
-                <span class="footer-separator">·</span>
-                <a href={heroData.whatsappUrl} target="_blank" rel="noopener">WhatsApp</a>
-              </>
-            )}
-            <span class="footer-separator">·</span>
-            <a href="mailto:tu@email.com">Email</a>
-          </div>
-        </div>
-      </div>
-    </footer>
+    <Footer 
+      currentYear={2025} 
+      showTechCredits={true}
+      socialLinks={{
+        github: heroData.githubUrl,
+        linkedin: heroData.linkedinUrl,
+        telegram: heroData.telegramUrl,
+        whatsapp: heroData.whatsappUrl,
+        email: heroData.email
+      }}
+    />
 
     <!-- Structured Data for SEO -->
     <script type="application/ld+json" set:html={JSON.stringify({

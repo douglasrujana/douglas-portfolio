@@ -1,16 +1,6 @@
 <script lang="ts">
-  /**
-   * ProjectCard Component
-   * Card para mostrar proyectos individuales
-   * Features:
-   * - Imagen con efecto hover
-   * - Overlay con acciones rápidas
-   * - Tags de tecnologías
-   * - Botones de acción
-   */
-
-  import { onMount } from 'svelte';
   import Card from '../ui/Card.svelte';
+  import Button from '../ui/Button.svelte';
   import TechBadge from '../ui/TechBadge.svelte';
 
   export let project: {
@@ -24,136 +14,57 @@
   };
 
   export let customClass = '';
-
-  // Desactivar efectos de hover complejos
-  // Se han eliminado los efectos que podrían causar repintados costosos
 </script>
 
-<Card hoverable={true} padding="md" class={`project-card ${customClass}`}>
-  <!-- Image with hover effect -->
-  <div class="project-image-wrapper">
+<Card hoverable={true} padding="md" class={`card-jony h-full flex flex-col ${customClass}`}>
+  <!-- Imagen del proyecto -->
+  <div class="relative overflow-hidden rounded-t-lg bg-gray-100 aspect-video">
     <img 
       src={project.image} 
       alt={project.title}
-      class="project-image"
+      class="w-full h-full object-cover"
       loading="lazy"
     />
-    <div class="image-overlay">
-      <div class="overlay-content">
-        {#if project.demoUrl || project.githubUrl}
-          <div class="quick-actions">
-            {#if project.demoUrl}
-              <a 
-                href={project.demoUrl}
-                target="_blank"
-                rel="noopener noreferrer"
-                class="quick-action-btn"
-                aria-label="Ver demo"
-              >
-                <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
-                  <polygon points="5 3 19 12 5 21 5 3"></polygon>
-                </svg>
-              </a>
-            {/if}
-            {#if project.githubUrl}
-              <a 
-                href={project.githubUrl}
-                target="_blank"
-                rel="noopener noreferrer"
-                class="quick-action-btn"
-                aria-label="Ver código"
-              >
-                <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
-                  <path d="M9 19c-5 1.5-5-2.5-7-3m14 6v-3.87a3.37 3.37 0 0 0-.94-2.61c3.14-.35 6.44-1.54 6.44-7A5.44 5.44 0 0 0 20 4.77 5.07 5.07 0 0 0 19.91 1S18.73.65 16 2.48a13.38 13.38 0 0 0-7 0C6.27.65 5.09 1 5.09 1A5.07 5.07 0 0 0 5 4.77a5.44 5.44 0 0 0-1.5 3.78c0 5.42 3.3 6.61 6.44 7A3.37 3.37 0 0 0 9 18.13V22"></path>
-                </svg>
-              </a>
-            {/if}
-          </div>
-        {/if}
-      </div>
-    </div>
   </div>
 
-  <!-- Content -->
-  <div class="project-content">
-    <h3 class="project-title">
+  <!-- Contenido -->
+  <div class="flex-1 p-6 flex flex-col">
+    <h3 class="text-xl font-medium text-gray-900 mb-2">
       {project.title}
     </h3>
 
-    <p class="project-description">
+    <p class="text-gray-600 mb-4 flex-1">
       {project.description}
     </p>
 
-    <!-- Tags -->
+    <!-- Etiquetas de tecnologías -->
     {#if project.tags.length > 0}
-      <div class="project-tags">
+      <div class="flex flex-wrap gap-2 mb-4">
         {#each project.tags as tag}
           <TechBadge label={tag} />
         {/each}
       </div>
     {/if}
 
-    <!-- Action Buttons -->
-    <div class="project-actions">
+    <!-- Botones de acción -->
+    <div class="flex gap-3 pt-2 border-t border-gray-100">
       {#if project.demoUrl}
-        <a 
-          href={project.demoUrl}
-          target="_blank"
-          rel="noopener noreferrer"
-          class="action-btn demo-btn"
-          aria-label="Ver demo"
-        >
-          <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+        <Button variant="ghost" size="sm" href={project.demoUrl} target="_blank">
+          <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round" class="mr-1">
             <path d="M18 13v6a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2V8a2 2 0 0 1 2-2h6"></path>
             <polyline points="15 3 21 3 21 9"></polyline>
             <line x1="10" y1="14" x2="21" y2="3"></line>
           </svg>
-          <span>Demo</span>
-        </a>
+          Demo
+        </Button>
       {/if}
       {#if project.githubUrl}
-        <a 
-          href={project.githubUrl}
-          target="_blank"
-          rel="noopener noreferrer"
-          class="action-btn code-btn"
-          aria-label="Ver código"
-        >
-          <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+        <Button variant="ghost" size="sm" href={project.githubUrl} target="_blank">
+          <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round" class="mr-1">
             <path d="M9 19c-5 1.5-5-2.5-7-3m14 6v-3.87a3.37 3.37 0 0 0-.94-2.61c3.14-.35 6.44-1.54 6.44-7A5.44 5.44 0 0 0 20 4.77 5.07 5.07 0 0 0 19.91 1S18.73.65 16 2.48a13.38 13.38 0 0 0-7 0C6.27.65 5.09 1 5.09 1A5.07 5.07 0 0 0 5 4.77a5.44 5.44 0 0 0-1.5 3.78c0 5.42 3.3 6.61 6.44 7A3.37 3.37 0 0 0 9 18.13V22"></path>
           </svg>
-          <span>Código</span>
-        </a>
-      {/if}
-    </div>
-    
-    <!-- Links (mobile fallback) -->
-    <div class="project-links">
-      {#if project.demoUrl}
-        <a 
-          href={project.demoUrl}
-          target="_blank"
-          rel="noopener noreferrer"
-          class="project-link"
-        >
-          <span>Ver Demo</span>
-          <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
-            <path d="M5 12h14M12 5l7 7-7 7"/>
-          </svg>
-        </a>
-      {/if}
-      {#if project.githubUrl}
-        <a 
-          href={project.githubUrl}
-          target="_blank"
-          rel="noopener noreferrer"
-          class="project-link"
-        >
-          <span>Ver Código</span>
-          <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
-            <path d="M9 19c-5 1.5-5-2.5-7-3m14 6v-3.87a3.37 3.37 0 0 0-.94-2.61c3.14-.35 6.44-1.54 6.44-7A5.44 5.44 0 0 0 20 4.77 5.07 5.07 0 0 0 19.91 1S18.73.65 16 2.48a13.38 13.38 0 0 0-7 0C6.27.65 5.09 1 5.09 1A5.07 5.07 0 0 0 5 4.77a5.44 5.44 0 0 0-1.5 3.78c0 5.42 3.3 6.61 6.44 7A3.37 3.37 0 0 0 9 18.13V22"></path>
-          </svg>
-        </a>
+          Código
+        </Button>
       {/if}
     </div>
   </div>
