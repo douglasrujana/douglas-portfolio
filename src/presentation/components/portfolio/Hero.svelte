@@ -31,19 +31,9 @@
 
 <section class="hero-section">
   <div class="hero-container">
-    <!-- Avatar Circle con icono -->
     <div class="avatar-wrapper fade-in-jony" style="animation-delay: 0.1s;">
       <div class="avatar-circle">
-        <svg 
-          width="48" 
-          height="48" 
-          viewBox="0 0 24 24" 
-          fill="none" 
-          stroke="currentColor" 
-          stroke-width="2"
-          stroke-linecap="round" 
-          stroke-linejoin="round"
-        >
+        <svg width="48" height="48" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
           <polyline points="16 18 22 12 16 6"></polyline>
           <polyline points="8 6 2 12 8 18"></polyline>
         </svg>
@@ -137,15 +127,6 @@
       {/if}
     </div>
 
-    <!-- CTA Buttons -->
-    <div class="cta-buttons fade-in-jony" style="animation-delay: 0.6s;">
-      <Button variant="primary" size="lg" href="#projects">
-        Ver Proyectos
-      </Button>
-      <Button variant="ghost" size="lg" href="#contact">
-        Contactar
-      </Button>
-    </div>
 
     <!-- Scroll Indicator -->
     <div class="scroll-indicator fade-in-jony" style="animation-delay: 0.8s;">

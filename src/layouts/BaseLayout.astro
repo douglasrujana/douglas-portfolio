@@ -1,0 +1,63 @@
+---
+import Navigation from '../presentation/components/ui/Navigation.svelte';
+import Footer from '../presentation/components/ui/Footer.svelte';
+import { env } from '@infrastructure/config/env';
+
+const { title = 'Douglas Rujana', description = 'Desarrollador Full Stack' } = Astro.props;
+
+// URLs de contacto
+const telegramUrl = env.TELEGRAM_BOT_USERNAME ? `https://t.me/${env.TELEGRAM_BOT_USERNAME}` : null;
+const whatsappUrl = env.WHATSAPP_NUMBER ? `https://wa.me/${env.WHATSAPP_NUMBER}?text=Hola%20Douglas,%20tengo%20una%20consulta` : null;
+---
+
+<!DOCTYPE html>
+<html lang="es" class="scroll-smooth">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>{title}</title>
+    <meta name="description" content={description} />
+    
+    <!-- Open Graph / Facebook -->
+    <meta property="og:type" content="website" />
+    <meta property="og:title" content={title} />
+    <meta property="og:description" content={description} />
+    <meta property="og:image" content="/images/og-image.jpg" />
+
+    <!-- Twitter -->
+    <meta name="twitter:card" content="summary_large_image" />
+    <meta name="twitter:title" content={title} />
+    <meta name="twitter:description" content={description} />
+    <meta name="twitter:image" content="/images/og-image.jpg" />
+    
+    <!-- Estilos globales -->
+    <link rel="stylesheet" href="/styles/global.css" />
+    <style>
+      @import '../styles/jony-ive.css';
+    </style>
+  </head>
+  <body class="min-h-screen flex flex-col bg-white dark:bg-gray-900 text-gray-900 dark:text-gray-100 transition-colors duration-200">
+    <!-- Navegación -->
+    <div class="px-4 md:px-8">
+      <Navigation client:load />
+    </div>
+    
+    <!-- Contenido principal -->
+    <main class="flex-grow">
+      <slot />
+    </main>
+    
+    <!-- Pie de página -->
+    <Footer 
+      currentYear={new Date().getFullYear()}
+      showTechCredits={true}
+      socialLinks={{
+        github: 'https://github.com/douglasrujana',
+        linkedin: 'https://linkedin.com/in/douglasrujana',
+        telegram: telegramUrl,
+        whatsapp: whatsappUrl,
+        email: 'contacto@douglasrujana.com'
+      }}
+    />
+  </body>
+</html>

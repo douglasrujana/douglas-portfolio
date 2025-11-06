@@ -9,7 +9,7 @@
     { path: '/about', label: 'CV' },
     { path: '/#projects', label: 'Proyectos' },
     { path: '/#services', label: 'Servicios' },
-    { path: '/#contact', label: 'Contacto' },
+    { path: '/contact', label: 'Contacto' },
     { path: '/blog', label: 'Blog' }
   ];
   

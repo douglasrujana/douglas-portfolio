@@ -13,6 +13,7 @@ import ChatIsland from '@presentation/islands/ChatIsland.astro';
 import Navigation from '@presentation/components/ui/Navigation.svelte';
 import ScrollToTop from '@presentation/components/ui/ScrollToTop.simple.svelte';
 import Footer from '@presentation/components/ui/Footer.svelte';
+import CertificationsTabs from '../presentation/components/cv/CertificationsTabs.svelte';
 import {
   personalInfo,
   experiences,
@@ -165,18 +166,12 @@ const description = `${personalInfo.title} con ${yearsOfExperience}+ años de ex
       </div>
     </section>
 
-    </section>
-    
     <!-- Experiencia Laboral -->
     <section id="experience" class="section-jony" aria-labelledby="experience-heading">
       <div class="container-jony">
         <h2 id="experience-heading" class="section-title">Experiencia Laboral</h2>
-      <div class="container-jony">
-        <h2 class="section-title">Experiencia Laboral</h2>
         <ExperienceTimeline client:visible experiences={experiences} />
       </div>
-    </section>
-
     </section>
 
     <!-- Habilidades Técnicas -->
@@ -261,23 +256,10 @@ const description = `${personalInfo.title} con ${yearsOfExperience}+ años de ex
             ))}
           </div>
 
-          <!-- Certifications -->
+          <!-- Certificaciones -->
           <div class="cert-section">
             <h2 class="section-title">Certificaciones</h2>
-            <div class="cert-list">
-              {certifications.map((cert) => (
-                <div class="cert-card">
-                  <h3 class="cert-name">{cert.name}</h3>
-                  <p class="cert-issuer">{cert.issuer}</p>
-                  <time class="cert-date">{cert.date}</time>
-                  {cert.credentialUrl && (
-                    <a href={cert.credentialUrl} target="_blank" rel="noopener" class="cert-link">
-                      Ver credencial →
-                    </a>
-                  )}
-                </div>
-              ))}
-            </div>
+            <CertificationsTabs client:load />
           </div>
         </div>
       </div>
@@ -645,7 +627,8 @@ const description = `${personalInfo.title} con ${yearsOfExperience}+ años de ex
   /* Education & Certifications */
   .edu-cert-grid {
     display: grid;
-    grid-template-columns: 1fr 1fr;
+    grid-template-columns: 1fr;
+    gap: 3rem;
     gap: var(--space-2xl);
   }
 
@@ -689,40 +672,8 @@ const description = `${personalInfo.title} con ${yearsOfExperience}+ años de ex
     font-weight: 500;
   }
 
-  .cert-list {
-    display: flex;
-    flex-direction: column;
-    gap: var(--space-md);
-  }
-
-  .cert-card {
-    background: var(--color-white);
-    padding: var(--space-md);
-    border-radius: var(--radius-md);
-    border: 1px solid var(--color-gray-200);
-  }
-
-  .cert-name {
-    font-size: 1rem;
-    font-weight: 500;
-    margin-bottom: var(--space-xs);
-  }
-
-  .cert-issuer {
-    color: var(--color-gray-600);
-    margin-bottom: var(--space-xs);
-  }
-
-  .cert-date {
-    font-size: 0.875rem;
-    color: var(--color-gray-500);
-  }
-
-  .cert-link {
-    display: inline-block;
-    margin-top: var(--space-sm);
-    font-size: 0.875rem;
-    color: var(--color-accent);
+  .cert-section {
+    width: 100%;
   }
 
   /* Testimonials */
