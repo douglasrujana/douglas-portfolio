@@ -4,12 +4,13 @@
   "description": "Portfolio personal de Douglas Rujana - Arquitectura Hexagonal + Astro + SvelteKit + Gemini AI",
   "type": "module",
   "engines": {
-    "node": ">=18.0.0"
+    "node": ">=18.0.0",
+    "npm": ">=9.0.0"
   },
   "scripts": {
     "dev": "astro dev",
     "start": "astro dev",
-    "build": "astro check && astro build && astro check",
+    "build": "astro check && astro build && astro check && tsc --noEmit",
     "preview": "astro preview",
     "astro": "astro",
     "check": "astro check",
@@ -72,9 +73,5 @@
     "typescript"
   ],
   "author": "Douglas Rujana",
-  "license": "MIT",
-  "engines": {
-    "node": ">=18.0.0",
-    "npm": ">=9.0.0"
-  }
+  "license": "MIT"
 }

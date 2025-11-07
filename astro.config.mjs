@@ -17,6 +17,7 @@ export default defineConfig({
     // Configuraciones adicionales si son necesarias
   }),
   vite: {
+    base: '/',
     resolve: {
       alias: {
         '@': '/src',
@@ -26,5 +27,10 @@ export default defineConfig({
         '@presentation': '/src/presentation',
       },
     },
+    build: {
+      assetsDir: 'assets',
+    }
   },
+  // Configuración para rutas en producción
+  base: '/',
 });
