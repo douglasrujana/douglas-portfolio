@@ -1,7 +1,8 @@
 import { defineConfig } from 'astro/config';
 import svelte from '@astrojs/svelte';
 import tailwind from '@astrojs/tailwind';
-import mdx from '@astrojs/mdx';  
+import mdx from '@astrojs/mdx';
+import vercel from '@astrojs/vercel/serverless';
 
 export default defineConfig({
   integrations: [
@@ -12,6 +13,9 @@ export default defineConfig({
     mdx()
   ],
   output: 'server',
+  adapter: vercel({
+    // Configuraciones adicionales si son necesarias
+  }),
   vite: {
     resolve: {
       alias: {
